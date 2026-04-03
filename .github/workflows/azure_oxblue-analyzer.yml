@@ -3,7 +3,7 @@ name: Deploy OxBlue Analyzer to Azure Web App
 on:
   push:
     branches:
-      - main
+      - Azure
   workflow_dispatch:   # allows manual trigger from GitHub Actions tab
 
 jobs:
