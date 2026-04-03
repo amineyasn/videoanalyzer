@@ -1,194 +1,195 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>OxBlue Site Analyzer v3</title>
+<title>OxBlue Site Analyzer v4</title>
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f4f5f7; min-height: 100vh; }
-::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f4f5f7;min-height:100vh;}
+::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-thumb{background:#d1d5db;border-radius:4px;}
 
-.wrap { max-width: 940px; margin: 0 auto; padding: 28px 18px 60px; }
+.wrap{max-width:960px;margin:0 auto;padding:24px 18px 60px;}
 
 /* Header */
-.header { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; }
-.logo { width: 42px; height: 42px; border-radius: 11px; background: #1a1a2e;
-  display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
-.header-text h1 { font-size: 20px; font-weight: 700; color: #1a1a2e; letter-spacing: -0.02em; }
-.header-text p  { font-size: 12px; color: #888; margin-top: 1px; }
+.header{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+.logo{width:42px;height:42px;border-radius:11px;background:#1a1a2e;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.header-text h1{font-size:20px;font-weight:700;color:#1a1a2e;letter-spacing:-0.02em;}
+.header-text p{font-size:12px;color:#888;margin-top:1px;}
 
-/* Pipeline diagram */
-.pipeline { display: flex; align-items: center; gap: 0; margin-bottom: 20px;
-  background: #fff; border: 1px solid #e0e3e8; border-radius: 12px; overflow: hidden; }
-.pipe-step { flex: 1; padding: 10px 12px; border-right: 1px solid #e0e3e8; }
-.pipe-step:last-child { border-right: none; }
-.pipe-step .ps-num { font-size: 10px; font-weight: 700; color: #aaa; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 2px; }
-.pipe-step .ps-name { font-size: 12px; font-weight: 600; color: #1a1a2e; }
-.pipe-step .ps-desc { font-size: 11px; color: #888; margin-top: 1px; }
-.pipe-step.active .ps-name { color: #2563eb; }
-.pipe-arrow { font-size: 14px; color: #d1d5db; padding: 0 2px; flex-shrink: 0; }
+/* Pipeline */
+.pipeline{display:flex;background:#fff;border:1px solid #e0e3e8;border-radius:12px;overflow:hidden;margin-bottom:18px;}
+.pipe-step{flex:1;padding:9px 12px;border-right:1px solid #e0e3e8;}
+.pipe-step:last-child{border-right:none;}
+.ps-num{font-size:9px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.06em;margin-bottom:1px;}
+.ps-name{font-size:12px;font-weight:600;color:#1a1a2e;}
+.ps-desc{font-size:10px;color:#888;margin-top:1px;line-height:1.3;}
 
 /* Settings */
-.settings { background: #fff; border: 1px solid #e0e3e8; border-radius: 12px;
-  padding: 14px 18px; margin-bottom: 18px; display: flex; gap: 20px; flex-wrap: wrap; align-items: center; }
-.sg { display: flex; flex-direction: column; gap: 5px; }
-.sg label { font-size: 10px; font-weight: 700; color: #777; text-transform: uppercase; letter-spacing: 0.06em; }
-.sg select { border: 1px solid #e0e3e8; border-radius: 7px; padding: 6px 10px;
-  font-size: 13px; background: #fafafa; outline: none; color: #1a1a2e; min-width: 160px; }
-.toggle-row { display: flex; align-items: center; gap: 8px; }
-.toggle-switch { position: relative; width: 36px; height: 20px; flex-shrink: 0; }
-.toggle-switch input { opacity: 0; width: 0; height: 0; }
-.toggle-slider { position: absolute; inset: 0; background: #d1d5db; border-radius: 20px; cursor: pointer; transition: 0.2s; }
-.toggle-slider:before { content: ''; position: absolute; width: 14px; height: 14px;
-  left: 3px; bottom: 3px; background: #fff; border-radius: 50%; transition: 0.2s; }
-input:checked + .toggle-slider { background: #2563eb; }
-input:checked + .toggle-slider:before { transform: translateX(16px); }
-.toggle-label { font-size: 12px; color: #444; }
-.toggle-label span { font-size: 11px; color: #888; display: block; margin-top: 1px; }
-
-.status-row { display: flex; gap: 10px; margin-left: auto; flex-wrap: wrap; }
-.status-pill { display: flex; align-items: center; gap: 5px; font-size: 11px;
-  background: #f9fafb; border: 1px solid #e0e3e8; border-radius: 20px; padding: 4px 10px; }
-.sdot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-.sdot.on  { background: #22c55e; }
-.sdot.off { background: #ef4444; }
-.sdot.na  { background: #f59e0b; }
+.settings{background:#fff;border:1px solid #e0e3e8;border-radius:12px;padding:14px 18px;margin-bottom:18px;display:flex;gap:18px;flex-wrap:wrap;align-items:center;}
+.sg{display:flex;flex-direction:column;gap:5px;}
+.sg label{font-size:10px;font-weight:700;color:#777;text-transform:uppercase;letter-spacing:.06em;}
+.sg select{border:1px solid #e0e3e8;border-radius:7px;padding:6px 10px;font-size:13px;background:#fafafa;outline:none;color:#1a1a2e;min-width:150px;}
+.toggle-row{display:flex;align-items:center;gap:8px;}
+.tsw{position:relative;width:36px;height:20px;flex-shrink:0;}
+.tsw input{opacity:0;width:0;height:0;}
+.tsl{position:absolute;inset:0;background:#d1d5db;border-radius:20px;cursor:pointer;transition:.2s;}
+.tsl:before{content:'';position:absolute;width:14px;height:14px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.2s;}
+input:checked+.tsl{background:#2563eb;}
+input:checked+.tsl:before{transform:translateX(16px);}
+.tl{font-size:12px;color:#444;}
+.tl span{font-size:10px;color:#888;display:block;margin-top:1px;}
+.status-row{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap;}
+.sp{display:flex;align-items:center;gap:5px;font-size:11px;background:#f9fafb;border:1px solid #e0e3e8;border-radius:20px;padding:4px 10px;}
+.sd{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.sd.on{background:#22c55e;}.sd.off{background:#ef4444;}.sd.na{background:#f59e0b;}
 
 /* Buttons */
-.btn { border: 1px solid #e0e3e8; border-radius: 8px; padding: 7px 14px;
-  font-size: 13px; cursor: pointer; background: #fff; color: #444; transition: all 0.15s; }
-.btn:hover { background: #f5f5f5; }
-.btn-dark { background: #1a1a2e; color: #e2b96f; border-color: #1a1a2e; font-weight: 700; }
-.btn-dark:hover { background: #2a2a4e; }
-.btn-dark:disabled { background: #888; border-color: #888; cursor: not-allowed; }
+.btn{border:1px solid #e0e3e8;border-radius:8px;padding:7px 14px;font-size:13px;cursor:pointer;background:#fff;color:#444;transition:all .15s;}
+.btn:hover{background:#f5f5f5;}
+.btn-dark{background:#1a1a2e;color:#e2b96f;border-color:#1a1a2e;font-weight:700;}
+.btn-dark:hover{background:#2a2a4e;}
+.btn-dark:disabled{background:#888;border-color:#888;cursor:not-allowed;}
 
 /* Upload */
-#drop-zone { border: 2px dashed #d1d5db; border-radius: 16px; padding: 56px 24px;
-  text-align: center; cursor: pointer; background: #fafafa; transition: all 0.15s; }
-#drop-zone.drag { border-color: #e2b96f; background: #fffbf0; }
-#drop-zone h2 { font-size: 16px; font-weight: 600; color: #1a1a2e; margin: 10px 0 5px; }
-#drop-zone p  { font-size: 13px; color: #888; }
+#drop-zone{border:2px dashed #d1d5db;border-radius:16px;padding:52px 24px;text-align:center;cursor:pointer;background:#fafafa;transition:all .15s;}
+#drop-zone.drag{border-color:#e2b96f;background:#fffbf0;}
+#drop-zone h2{font-size:16px;font-weight:600;color:#1a1a2e;margin:10px 0 5px;}
+#drop-zone p{font-size:13px;color:#888;}
 
 /* Video */
-#video-panel { border: 1px solid #e0e3e8; border-radius: 14px; overflow: hidden; margin-bottom: 16px; display: none; }
-#preview { width: 100%; display: block; background: #000; max-height: 380px; }
-.video-bar { padding: 10px 14px; background: #fafafa; border-top: 1px solid #e0e3e8;
-  display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-.video-meta { font-size: 11px; color: #888; font-family: monospace; flex: 1;
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#video-panel{border:1px solid #e0e3e8;border-radius:14px;overflow:hidden;margin-bottom:16px;display:none;}
+#preview{width:100%;display:block;background:#000;max-height:360px;}
+.video-bar{padding:10px 14px;background:#fafafa;border-top:1px solid #e0e3e8;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.video-meta{font-size:11px;color:#888;font-family:monospace;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 
 /* Progress */
-#progress-wrap { display: none; margin-bottom: 14px; }
-.prog-row { display: flex; justify-content: space-between; margin-bottom: 6px; }
-.prog-row span { font-size: 12px; color: #666; }
-.prog-row span:last-child { font-family: monospace; font-weight: 600; color: #1a1a2e; }
-.pbar { height: 6px; background: #e8eaed; border-radius: 3px; overflow: hidden; }
-.pbar-fill { height: 100%; background: linear-gradient(90deg, #1a1a2e, #e2b96f);
-  width: 0%; border-radius: 3px; transition: width 0.3s; }
+#progress-wrap{display:none;margin-bottom:14px;}
+.prog-row{display:flex;justify-content:space-between;margin-bottom:6px;}
+.prog-row span{font-size:12px;color:#666;}
+.prog-row span:last-child{font-family:monospace;font-weight:600;color:#1a1a2e;}
+.pbar{height:6px;background:#e8eaed;border-radius:3px;overflow:hidden;}
+.pbar-fill{height:100%;background:linear-gradient(90deg,#1a1a2e,#e2b96f);width:0%;border-radius:3px;transition:width .3s;}
 
 /* Log */
-#log { background: #0e0e1c; border-radius: 10px; padding: 12px 14px; margin-bottom: 18px;
-  max-height: 170px; overflow-y: auto; display: none; }
-.ll { font-size: 11px; font-family: monospace; line-height: 1.75; color: #5a6070; }
-.ll.ok   { color: #4ade80; }
-.ll.warn { color: #facc15; }
-.ll.err  { color: #f87171; }
-.ll.claude { color: #818cf8; }
+#log{background:#0e0e1c;border-radius:10px;padding:12px 14px;margin-bottom:18px;max-height:160px;overflow-y:auto;display:none;}
+.ll{font-size:11px;font-family:monospace;line-height:1.75;color:#5a6070;}
+.ll.ok{color:#4ade80;}.ll.warn{color:#facc15;}.ll.err{color:#f87171;}.ll.delivery{color:#60a5fa;}.ll.claude{color:#a78bfa;}
 
-/* Safety banner */
-#safety-banner { display: none; border-radius: 12px; padding: 14px 18px; margin-bottom: 18px; border-left: 4px solid; }
-.banner-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
-.banner-sub   { font-size: 12px; opacity: 0.75; }
+/* ── TABS ── */
+.tabs{display:none;border-bottom:2px solid #e0e3e8;margin-bottom:20px;gap:0;}
+.tab-btn{padding:10px 20px;font-size:13px;font-weight:600;color:#888;cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s;}
+.tab-btn.active{color:#1a1a2e;border-bottom-color:#1a1a2e;}
+.tab-btn .tab-badge{display:inline-block;background:#e5e7eb;color:#555;border-radius:10px;padding:1px 7px;font-size:10px;margin-left:5px;font-weight:700;}
+.tab-btn.active .tab-badge{background:#1a1a2e;color:#e2b96f;}
+.tab-btn .tab-badge.red{background:#fee2e2;color:#991b1b;}
+.tab-btn.active .tab-badge.red{background:#dc2626;color:#fff;}
+.tab-btn .tab-badge.green{background:#dcfce7;color:#166534;}
+.tab-btn.active .tab-badge.green{background:#16a34a;color:#fff;}
 
-/* Stats */
-#summary { display: none; margin-bottom: 20px; }
-.stat-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-bottom: 14px; }
-.stat-card { background: #fff; border: 1px solid #e0e3e8; border-radius: 10px; padding: 11px 8px; text-align: center; }
-.stat-num { font-size: 20px; font-weight: 700; }
-.stat-lbl { font-size: 10px; color: #888; margin-top: 3px; text-transform: uppercase; letter-spacing: 0.04em; line-height: 1.3; }
-.stat-card.danger { border-color: #fca5a5; background: #fef2f2; }
-.stat-card.warn   { border-color: #fde68a; background: #fffbeb; }
-.stat-card.safe   { border-color: #86efac; background: #f0fdf4; }
+.tab-pane{display:none;}
+.tab-pane.active{display:block;}
+
+/* Stats row */
+.stat-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:14px;}
+.stat-card{background:#fff;border:1px solid #e0e3e8;border-radius:10px;padding:11px 8px;text-align:center;}
+.stat-num{font-size:20px;font-weight:700;}
+.stat-lbl{font-size:10px;color:#888;margin-top:3px;text-transform:uppercase;letter-spacing:.04em;line-height:1.3;}
+.stat-card.danger{border-color:#fca5a5;background:#fef2f2;}
+.stat-card.warn{border-color:#fde68a;background:#fffbeb;}
+.stat-card.safe{border-color:#86efac;background:#f0fdf4;}
+.stat-card.steel{border-color:#93c5fd;background:#eff6ff;}
 
 /* Legend */
-.legend { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
-.leg { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #555; }
-.leg-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
+.leg{display:flex;align-items:center;gap:5px;font-size:11px;color:#555;}
+.leg-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
 
 /* Filter */
-#filter-bar { display: none; margin-bottom: 12px; }
-.filter-row { display: flex; gap: 6px; flex-wrap: wrap; }
-.f-btn { border: 1px solid #e0e3e8; border-radius: 20px; padding: 4px 12px;
-  font-size: 12px; cursor: pointer; background: #fff; color: #555; transition: all 0.15s; }
-.f-btn.active { background: #1a1a2e; color: #e2b96f; border-color: #1a1a2e; }
-
-/* Results header */
-.results-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-.results-hdr h3 { font-size: 14px; font-weight: 600; color: #1a1a2e; }
+.filter-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.f-btn{border:1px solid #e0e3e8;border-radius:20px;padding:4px 12px;font-size:12px;cursor:pointer;background:#fff;color:#555;transition:all .15s;}
+.f-btn.active{background:#1a1a2e;color:#e2b96f;border-color:#1a1a2e;}
 
 /* Frame cards */
-.frame-card { background: #fff; border: 1px solid #e0e3e8; border-radius: 12px;
-  overflow: hidden; margin-bottom: 8px; }
-.frame-card.risk-high     { border-color: #fca5a5; box-shadow: 0 0 0 1px #fca5a5; }
-.frame-card.risk-medium   { border-color: #fde68a; }
-.frame-card.risk-low      { }
-.frame-card.risk-none     { opacity: 0.65; }
-
-.fcard-head { display: flex; align-items: center; gap: 8px; padding: 9px 14px;
-  cursor: pointer; user-select: none; background: #fafafa; border-bottom: 1px solid #e0e3e8; flex-wrap: wrap; }
-.fcard-head.collapsed { border-bottom: none; }
-.fcard-head.risk-high   { background: #fff5f5; }
-.fcard-head.risk-medium { background: #fffdf0; }
-
-.ts { font-family: monospace; font-size: 12px; background: #1a1a2e; color: #e2b96f;
-  padding: 2px 8px; border-radius: 5px; flex-shrink: 0; }
-.risk-chip { border-radius: 20px; padding: 2px 9px; font-size: 10px; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.06em; border: 1px solid; white-space: nowrap; }
-.risk-chip.high     { background:#fef2f2; color:#991b1b; border-color:#fca5a5; }
-.risk-chip.medium   { background:#fffbeb; color:#92400e; border-color:#fde68a; }
-.risk-chip.low      { background:#f0fdf4; color:#166534; border-color:#86efac; }
-.risk-chip.none     { background:#f9fafb; color:#6b7280; border-color:#d1d5db; }
-
-.claude-badge { font-size: 10px; background: #ede9fe; color: #5b21b6; border: 1px solid #c4b5fd;
-  border-radius: 20px; padding: 2px 8px; font-weight: 600; }
-.mini-counts { margin-left: auto; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
-.mc { font-size: 11px; padding: 1px 7px; border-radius: 4px; font-weight: 600; }
-.mc-v { background:#fee2e2; color:#991b1b; }
-.mc-s { background:#fff7ed; color:#c2410c; }
-.mc-p { background:#dcfce7; color:#166534; }
-.mc-k { background:#eff6ff; color:#1e40af; }
-.mc-e { background:#f5f3ff; color:#5b21b6; }
-.toggle-arrow { color: #bbb; font-size: 10px; margin-left: 4px; }
+.frame-card{background:#fff;border:1px solid #e0e3e8;border-radius:12px;overflow:hidden;margin-bottom:8px;}
+.frame-card.risk-high{border-color:#fca5a5;box-shadow:0 0 0 1px #fca5a5;}
+.frame-card.risk-medium{border-color:#fde68a;}
+.frame-card.has-delivery{border-color:#93c5fd;}
+.fcard-head{display:flex;align-items:center;gap:8px;padding:9px 14px;cursor:pointer;user-select:none;background:#fafafa;border-bottom:1px solid #e0e3e8;flex-wrap:wrap;}
+.fcard-head.collapsed{border-bottom:none;}
+.fcard-head.risk-high{background:#fff5f5;}
+.fcard-head.risk-medium{background:#fffdf0;}
+.fcard-head.has-delivery{background:#f0f7ff;}
+.ts{font-family:monospace;font-size:12px;background:#1a1a2e;color:#e2b96f;padding:2px 8px;border-radius:5px;flex-shrink:0;}
+.risk-chip{border-radius:20px;padding:2px 9px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;border:1px solid;white-space:nowrap;}
+.risk-chip.high{background:#fef2f2;color:#991b1b;border-color:#fca5a5;}
+.risk-chip.medium{background:#fffbeb;color:#92400e;border-color:#fde68a;}
+.risk-chip.low{background:#f0fdf4;color:#166534;border-color:#86efac;}
+.risk-chip.none{background:#f9fafb;color:#6b7280;border-color:#d1d5db;}
+.delivery-chip{background:#eff6ff;color:#1e40af;border:1px solid #93c5fd;border-radius:20px;padding:2px 9px;font-size:10px;font-weight:700;white-space:nowrap;}
+.delivery-chip.steel{background:#fef9c3;color:#713f12;border-color:#fde047;}
+.claude-badge{font-size:10px;background:#ede9fe;color:#5b21b6;border:1px solid #c4b5fd;border-radius:20px;padding:2px 8px;font-weight:600;}
+.mini-counts{margin-left:auto;display:flex;gap:5px;align-items:center;flex-wrap:wrap;}
+.mc{font-size:11px;padding:1px 7px;border-radius:4px;font-weight:600;}
+.mc-v{background:#fee2e2;color:#991b1b;}.mc-s{background:#fff7ed;color:#c2410c;}
+.mc-p{background:#dcfce7;color:#166534;}.mc-k{background:#eff6ff;color:#1e40af;}
+.mc-e{background:#f5f3ff;color:#5b21b6;}.mc-d{background:#fef9c3;color:#713f12;}
+.toggle-arrow{color:#bbb;font-size:10px;margin-left:4px;}
 
 /* Frame body */
-.fcard-body { padding: 12px 14px; }
-.det-section { margin-bottom: 10px; }
-.det-section:last-child { margin-bottom: 0; }
-.det-section-title { font-size: 10px; font-weight: 700; text-transform: uppercase;
-  letter-spacing: 0.07em; margin-bottom: 6px; }
-.det-pills { display: flex; flex-wrap: wrap; gap: 5px; }
-.dpill { border-radius: 6px; padding: 3px 10px; font-size: 12px; border: 1px solid; }
-.dpill.violation  { background:#fee2e2; color:#7f1d1d; border-color:#fca5a5; font-weight:600; }
-.dpill.suspicious { background:#fff7ed; color:#7c2d12; border-color:#fdba74; font-weight:600; }
-.dpill.ppe        { background:#dcfce7; color:#14532d; border-color:#86efac; }
-.dpill.person     { background:#eff6ff; color:#1e3a8a; border-color:#93c5fd; }
-.dpill.equipment  { background:#f5f3ff; color:#4c1d95; border-color:#c4b5fd; }
-.dpill.other      { background:#f9fafb; color:#374151; border-color:#d1d5db; }
-.dpill .conf      { font-size: 10px; opacity: 0.55; margin-left: 3px; }
-.dpill .note      { font-size: 10px; color: #888; display: block; margin-top: 2px; }
+.fcard-body{padding:12px 14px;}
+.det-section{margin-bottom:10px;}
+.det-section:last-child{margin-bottom:0;}
+.det-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px;}
+.det-pills{display:flex;flex-wrap:wrap;gap:5px;}
+.dpill{border-radius:6px;padding:3px 10px;font-size:12px;border:1px solid;}
+.dpill.violation{background:#fee2e2;color:#7f1d1d;border-color:#fca5a5;font-weight:600;}
+.dpill.suspicious{background:#fff7ed;color:#7c2d12;border-color:#fdba74;font-weight:600;}
+.dpill.ppe{background:#dcfce7;color:#14532d;border-color:#86efac;}
+.dpill.person{background:#eff6ff;color:#1e3a8a;border-color:#93c5fd;}
+.dpill.equipment{background:#f5f3ff;color:#4c1d95;border-color:#c4b5fd;}
+.dpill.steel_delivery{background:#fef9c3;color:#713f12;border-color:#fde047;font-weight:600;}
+.dpill.delivery{background:#eff6ff;color:#1e40af;border-color:#93c5fd;}
+.dpill.other{background:#f9fafb;color:#374151;border-color:#d1d5db;}
+.conf{font-size:10px;opacity:.55;margin-left:3px;}
+.note{font-size:10px;color:#888;display:block;margin-top:2px;}
 
-/* Claude detail box */
-.claude-detail { background: #f5f3ff; border: 1px solid #c4b5fd; border-radius: 8px;
-  padding: 10px 12px; margin-top: 8px; }
-.claude-detail-title { font-size: 10px; font-weight: 700; color: #5b21b6;
-  text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
-.claude-person { font-size: 12px; color: #374151; margin-bottom: 4px; padding: 4px 8px;
-  background: #fff; border-radius: 6px; border: 1px solid #e9d5ff; }
-.claude-assessment { font-size: 12px; color: #5b21b6; font-style: italic; margin-top: 6px; }
+/* Claude boxes */
+.claude-box{border-radius:8px;padding:10px 12px;margin-top:8px;}
+.claude-box.ppe{background:#f5f3ff;border:1px solid #c4b5fd;}
+.claude-box.delivery{background:#fffbeb;border:1px solid #fde68a;}
+.cb-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;}
+.cb-row{font-size:12px;color:#374151;margin-bottom:4px;padding:4px 8px;background:#fff;border-radius:6px;border:1px solid #e9e9e9;}
+.cb-summary{font-size:12px;font-style:italic;margin-top:6px;}
+.no-det{font-size:12px;color:#aaa;font-style:italic;}
 
-.no-det { font-size: 12px; color: #aaa; font-style: italic; }
+/* ── DELIVERY EVENTS TAB ── */
+.delivery-event{background:#fff;border:1px solid #e0e3e8;border-radius:14px;overflow:hidden;margin-bottom:14px;}
+.de-header{padding:14px 18px;background:#fffbeb;border-bottom:1px solid #fde68a;display:flex;align-items:flex-start;gap:14px;}
+.de-number{width:36px;height:36px;border-radius:50%;background:#1a1a2e;color:#e2b96f;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;}
+.de-number.steel{background:#713f12;}
+.de-info{flex:1;}
+.de-title{font-size:15px;font-weight:700;color:#1a1a2e;margin-bottom:3px;}
+.de-title.steel{color:#713f12;}
+.de-meta{font-size:12px;color:#888;display:flex;gap:14px;flex-wrap:wrap;}
+.de-meta span{display:flex;align-items:center;gap:4px;}
+.de-body{padding:14px 18px;}
+.de-materials{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;}
+.mat-pill{border-radius:8px;padding:5px 12px;font-size:12px;font-weight:600;border:1px solid;}
+.mat-pill.steel{background:#fef9c3;color:#713f12;border-color:#fde047;}
+.mat-pill.other{background:#eff6ff;color:#1e40af;border-color:#93c5fd;}
+.mat-pill.unclear{background:#f9fafb;color:#6b7280;border-color:#d1d5db;}
+.de-timeline{display:flex;align-items:center;gap:8px;font-size:12px;color:#666;margin-bottom:10px;}
+.de-timeline .tl-arrow{color:#d1d5db;font-size:18px;}
+.de-timeline .tl-time{font-family:monospace;font-weight:600;color:#1a1a2e;}
+.de-timeline .tl-label{color:#888;}
+.de-frames{margin-top:10px;}
+.de-frames-title{font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;}
+.de-frame-row{font-size:12px;color:#444;padding:5px 10px;background:#fafafa;border-radius:6px;margin-bottom:4px;border:1px solid #e0e3e8;}
+.de-frame-row.steel{border-color:#fde047;background:#fffef0;}
+.no-deliveries{text-align:center;padding:40px 20px;color:#888;font-size:14px;}
+.no-deliveries .nd-icon{font-size:40px;margin-bottom:12px;}
 </style>
 </head>
 <body>
@@ -196,31 +197,20 @@ input:checked + .toggle-slider:before { transform: translateX(16px); }
 
   <!-- Header -->
   <div class="header">
-    <div class="logo">⛑</div>
+    <img   src="oxblue-logo-ai.png" alt="OxBlue" style="height:52px;width:auto;object-fit:contain;flex-shrink:0;border-radius:8px;">
     <div class="header-text">
-      <h1>OxBlue Site Analyzer <span style="font-size:13px;font-weight:400;color:#888">v3</span></h1>
-      <p>3-stage pipeline: YOLO Safety Model → Proximity Check → Claude Vision</p>
+      <h1>Site Analyzer <span style="font-size:13px;font-weight:400;color:#888">v4</span></h1>
+      <p>Safety monitoring · Hard hat detection · Steel & material delivery tracking</p>
     </div>
     <button id="btn-export" class="btn btn-dark" style="display:none;margin-left:auto" onclick="exportJSON()">Export JSON ↓</button>
   </div>
 
-  <!-- Pipeline diagram -->
+  <!-- Pipeline -->
   <div class="pipeline">
-    <div class="pipe-step">
-      <div class="ps-num">Stage 1</div>
-      <div class="ps-name">YOLO Safety Model</div>
-      <div class="ps-desc">Hardhat / NO-Hardhat / vest / person</div>
-    </div>
-    <div class="pipe-step">
-      <div class="ps-num">Stage 2</div>
-      <div class="ps-name">Proximity Check</div>
-      <div class="ps-desc">Person with no hardhat nearby → suspicious</div>
-    </div>
-    <div class="pipe-step" id="pipe-claude">
-      <div class="ps-num">Stage 3</div>
-      <div class="ps-name" id="pipe-claude-name">Claude Vision</div>
-      <div class="ps-desc">Beanie vs hard hat vs no hat — only on flagged frames</div>
-    </div>
+    <div class="pipe-step"><div class="ps-num">Stage 1</div><div class="ps-name">YOLO Safety</div><div class="ps-desc">Hard hat / PPE / person / truck</div></div>
+    <div class="pipe-step"><div class="ps-num">Stage 2</div><div class="ps-name">Proximity Check</div><div class="ps-desc">Person + no hardhat nearby → suspicious</div></div>
+    <div class="pipe-step"><div class="ps-num">Stage 3</div><div class="ps-name">Claude PPE</div><div class="ps-desc">Beanie vs hard hat on flagged frames</div></div>
+    <div class="pipe-step"><div class="ps-num">Stage 4 ✨</div><div class="ps-name" style="color:#d97706">Claude Delivery</div><div class="ps-desc">Steel / material on truck → delivery events</div></div>
   </div>
 
   <!-- Settings -->
@@ -229,8 +219,8 @@ input:checked + .toggle-slider:before { transform: translateX(16px); }
       <label>Sample Rate</label>
       <select id="fps">
         <option value="0.5">1 frame / 2 sec</option>
-        <option value="1" selected>1 fps — default</option>
-        <option value="2">2 fps — detailed</option>
+        <option value="1" selected>1 fps</option>
+        <option value="2">2 fps</option>
       </select>
     </div>
     <div class="sg">
@@ -242,21 +232,15 @@ input:checked + .toggle-slider:before { transform: translateX(16px); }
       </select>
     </div>
     <div class="sg">
-      <label>Claude Vision (Stage 3)</label>
+      <label>Claude Vision (Stages 3 & 4)</label>
       <div class="toggle-row">
-        <label class="toggle-switch">
-          <input type="checkbox" id="use-claude" checked>
-          <span class="toggle-slider"></span>
-        </label>
-        <div class="toggle-label">
-          Enable second pass
-          <span id="claude-toggle-note">Requires ANTHROPIC_API_KEY in server</span>
-        </div>
+        <label class="tsw"><input type="checkbox" id="use-claude" checked><span class="tsl"></span></label>
+        <div class="tl">PPE + Delivery analysis<span id="claude-note">Requires ANTHROPIC_API_KEY</span></div>
       </div>
     </div>
     <div class="status-row">
-      <div class="status-pill"><div class="sdot" id="dot-yolo"></div><span id="st-yolo">YOLO…</span></div>
-      <div class="status-pill"><div class="sdot" id="dot-claude"></div><span id="st-claude">Claude…</span></div>
+      <div class="sp"><div class="sd" id="dot-yolo"></div><span id="st-yolo">YOLO…</span></div>
+      <div class="sp"><div class="sd" id="dot-claude"></div><span id="st-claude">Claude…</span></div>
     </div>
   </div>
 
@@ -268,7 +252,7 @@ input:checked + .toggle-slider:before { transform: translateX(16px); }
     <input id="fi" type="file" accept="video/*" style="display:none"/>
   </div>
 
-  <!-- Video panel -->
+  <!-- Video -->
   <div id="video-panel">
     <video id="preview" controls></video>
     <div class="video-bar">
@@ -282,152 +266,178 @@ input:checked + .toggle-slider:before { transform: translateX(16px); }
 
   <!-- Progress -->
   <div id="progress-wrap">
-    <div class="prog-row">
-      <span id="prog-label">Running 3-stage detection…</span>
-      <span id="prog-text">0 / 0</span>
-    </div>
+    <div class="prog-row"><span id="prog-label">Running 4-stage detection…</span><span id="prog-text">0/0</span></div>
     <div class="pbar"><div class="pbar-fill" id="pbar"></div></div>
   </div>
 
   <!-- Log -->
   <div id="log"></div>
 
-  <!-- Banner -->
-  <div id="safety-banner">
-    <div class="banner-title" id="b-title"></div>
-    <div class="banner-sub"   id="b-sub"></div>
+  <!-- TABS -->
+  <div class="tabs" id="tabs" style="display:flex">
+    <button class="tab-btn active" onclick="showTab('safety',this)">
+      Safety <span class="tab-badge red" id="badge-violations">0</span>
+    </button>
+    <button class="tab-btn" onclick="showTab('deliveries',this)">
+      Deliveries <span class="tab-badge green" id="badge-deliveries">0</span>
+    </button>
+    <button class="tab-btn" onclick="showTab('frames',this)">
+      All Frames <span class="tab-badge" id="badge-frames">0</span>
+    </button>
   </div>
 
-  <!-- Stats -->
-  <div id="summary">
-    <div class="stat-grid">
-      <div class="stat-card">
-        <div class="stat-num" id="s-frames" style="color:#1a1a2e">0</div>
-        <div class="stat-lbl">Frames</div>
+  <!-- TAB: Safety -->
+  <div class="tab-pane active" id="tab-safety">
+    <div id="summary-safety" style="display:none">
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-num" id="s-frames" style="color:#1a1a2e">0</div><div class="stat-lbl">Frames</div></div>
+        <div class="stat-card danger"><div class="stat-num" id="s-violations" style="color:#dc2626">0</div><div class="stat-lbl">⚠ Violations</div></div>
+        <div class="stat-card warn"><div class="stat-num" id="s-suspicious" style="color:#d97706">0</div><div class="stat-lbl">? Suspicious</div></div>
+        <div class="stat-card safe"><div class="stat-num" id="s-ppe" style="color:#16a34a">0</div><div class="stat-lbl">✓ PPE OK</div></div>
+        <div class="stat-card"><div class="stat-num" id="s-people" style="color:#2563eb">0</div><div class="stat-lbl">People</div></div>
+        <div class="stat-card steel"><div class="stat-num" id="s-equip" style="color:#1e40af">0</div><div class="stat-lbl">Equipment</div></div>
       </div>
-      <div class="stat-card danger">
-        <div class="stat-num" id="s-violations" style="color:#dc2626">0</div>
-        <div class="stat-lbl">⚠ Confirmed Violations</div>
+      <div class="legend">
+        <div class="leg"><div class="leg-dot" style="background:#fca5a5"></div>Violation</div>
+        <div class="leg"><div class="leg-dot" style="background:#fdba74"></div>Suspicious (non-hardhat)</div>
+        <div class="leg"><div class="leg-dot" style="background:#86efac"></div>PPE compliant</div>
+        <div class="leg"><div class="leg-dot" style="background:#93c5fd"></div>Person</div>
+        <div class="leg"><div class="leg-dot" style="background:#c4b5fd"></div>Equipment</div>
       </div>
-      <div class="stat-card warn">
-        <div class="stat-num" id="s-suspicious" style="color:#d97706">0</div>
-        <div class="stat-lbl">? Suspicious (review)</div>
-      </div>
-      <div class="stat-card safe">
-        <div class="stat-num" id="s-ppe" style="color:#16a34a">0</div>
-        <div class="stat-lbl">✓ PPE Compliant</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-num" id="s-people" style="color:#2563eb">0</div>
-        <div class="stat-lbl">People</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-num" id="s-equip" style="color:#7c3aed">0</div>
-        <div class="stat-lbl">Equipment</div>
+      <div class="filter-row" id="safety-filters">
+        <button class="f-btn active" onclick="setFilter(this,'all')">All</button>
+        <button class="f-btn" onclick="setFilter(this,'high')">⚠ Violations</button>
+        <button class="f-btn" onclick="setFilter(this,'medium')">? Suspicious</button>
+        <button class="f-btn" onclick="setFilter(this,'claude')">Claude reviewed</button>
       </div>
     </div>
-    <div class="legend">
-      <div class="leg"><div class="leg-dot" style="background:#fca5a5"></div>Confirmed violation (NO hard hat)</div>
-      <div class="leg"><div class="leg-dot" style="background:#fdba74"></div>Suspicious — non-hard-hat headwear detected by Claude</div>
-      <div class="leg"><div class="leg-dot" style="background:#86efac"></div>PPE compliant</div>
-      <div class="leg"><div class="leg-dot" style="background:#93c5fd"></div>Person</div>
-      <div class="leg"><div class="leg-dot" style="background:#c4b5fd"></div>Equipment / vehicle</div>
-      <div class="leg"><div class="leg-dot" style="background:#e9d5ff"></div>Claude Vision reviewed</div>
+    <div id="results-safety"></div>
+  </div>
+
+  <!-- TAB: Deliveries -->
+  <div class="tab-pane" id="tab-deliveries">
+    <div id="summary-deliveries" style="display:none">
+      <div class="stat-grid" style="grid-template-columns:repeat(4,1fr)">
+        <div class="stat-card"><div class="stat-num" id="d-events" style="color:#1a1a2e">0</div><div class="stat-lbl">Delivery Events</div></div>
+        <div class="stat-card steel"><div class="stat-num" id="d-steel" style="color:#713f12">0</div><div class="stat-lbl">🔩 Steel Deliveries</div></div>
+        <div class="stat-card"><div class="stat-num" id="d-other" style="color:#2563eb">0</div><div class="stat-lbl">Other Materials</div></div>
+        <div class="stat-card"><div class="stat-num" id="d-frames" style="color:#7c3aed">0</div><div class="stat-lbl">Truck Frames</div></div>
+      </div>
+    </div>
+    <div id="results-deliveries">
+      <div class="no-deliveries" id="no-deliveries-msg">
+        <div class="nd-icon">🚛</div>
+        <div style="font-weight:600;margin-bottom:5px">No deliveries detected yet</div>
+        <div style="font-size:12px">Delivery events will appear here when a truck is detected and analyzed by Claude Vision</div>
+      </div>
     </div>
   </div>
 
-  <!-- Filter -->
-  <div id="filter-bar">
-    <div class="filter-row">
-      <button class="f-btn active" onclick="setFilter(this,'all')">All frames</button>
-      <button class="f-btn" onclick="setFilter(this,'high')">⚠ Violations</button>
-      <button class="f-btn" onclick="setFilter(this,'medium')">? Suspicious</button>
-      <button class="f-btn" onclick="setFilter(this,'detections')">Has detections</button>
-      <button class="f-btn" onclick="setFilter(this,'claude')">Claude reviewed</button>
+  <!-- TAB: All Frames -->
+  <div class="tab-pane" id="tab-frames">
+    <div class="filter-row" id="all-frame-filters" style="display:none">
+      <button class="f-btn active" onclick="setFrameFilter(this,'all')">All</button>
+      <button class="f-btn" onclick="setFrameFilter(this,'detections')">Has detections</button>
+      <button class="f-btn" onclick="setFrameFilter(this,'delivery')">Truck / delivery</button>
     </div>
+    <div id="results-frames"></div>
   </div>
 
-  <!-- Results -->
-  <div class="results-hdr" id="results-hdr" style="display:none">
-    <h3>Frame-by-frame detections</h3>
-    <span id="results-count" style="font-size:12px;color:#999"></span>
-  </div>
-  <div id="results"></div>
-
-</div>
+</div><!-- /wrap -->
 <script>
-let videoFile = null, videoMeta = {}, allResults = [], activeFilter = 'all';
+let videoFile=null, videoMeta={}, allResults=[], allDeliveryEvents=[];
+let activeFilter='all', activeFrameFilter='all';
 
 // ── Server status ─────────────────────────────────────────────────────────────
 async function checkStatus() {
   try {
-    const r = await fetch('http://localhost:5000/status', { signal: AbortSignal.timeout(2500) });
-    const d = await r.json();
-    setDot('dot-yolo',   d.safety_model,  'st-yolo',   d.safety_model ? 'YOLO safety model' : 'YOLO (COCO only)');
-    setDot('dot-claude', d.claude_enabled,'st-claude',  d.claude_enabled ? 'Claude Vision ready' : 'Claude not configured');
-    if (!d.claude_enabled) {
-      document.getElementById('claude-toggle-note').textContent = 'Set ANTHROPIC_API_KEY in server to enable';
-      document.getElementById('use-claude').disabled = true;
-      document.getElementById('pipe-claude-name').style.color = '#aaa';
+    const r=await fetch('http://localhost:5000/status',{signal:AbortSignal.timeout(2500)});
+    const d=await r.json();
+    setDot('dot-yolo',d.safety_model,'st-yolo',d.safety_model?'YOLO safety model':'YOLO (COCO only)');
+    setDot('dot-claude',d.claude_enabled,'st-claude',d.claude_enabled?'Claude Vision ready':'Claude — set API key');
+    if(!d.claude_enabled){
+      document.getElementById('claude-note').textContent='Set ANTHROPIC_API_KEY to enable';
+      document.getElementById('use-claude').disabled=true;
     } else {
-      document.getElementById('claude-toggle-note').textContent = 'Only fires on uncertain frames (cost-efficient)';
+      document.getElementById('claude-note').textContent='PPE + delivery analysis on flagged frames';
     }
   } catch {
-    setDot('dot-yolo',   false, 'st-yolo',  'server offline');
-    setDot('dot-claude', false, 'st-claude', 'server offline');
+    setDot('dot-yolo',false,'st-yolo','server offline');
+    setDot('dot-claude',false,'st-claude','server offline');
   }
 }
-function setDot(dotId, ok, labelId, text) {
-  document.getElementById(dotId).className = 'sdot ' + (ok ? 'on' : (text.includes('offline') ? 'off' : 'na'));
-  document.getElementById(labelId).textContent = text;
+function setDot(id,ok,lid,txt){
+  document.getElementById(id).className='sd '+(ok?'on':txt.includes('offline')?'off':'na');
+  document.getElementById(lid).textContent=txt;
 }
 checkStatus();
 
+// ── Tabs ──────────────────────────────────────────────────────────────────────
+function showTab(name,btn) {
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  btn.classList.add('active');
+}
+
 // ── File handling ─────────────────────────────────────────────────────────────
-const dz = document.getElementById('drop-zone');
-const fi = document.getElementById('fi');
-dz.addEventListener('click', ()=>fi.click());
-dz.addEventListener('dragover', e=>{e.preventDefault();dz.classList.add('drag');});
-dz.addEventListener('dragleave', ()=>dz.classList.remove('drag'));
-dz.addEventListener('drop', e=>{e.preventDefault();dz.classList.remove('drag');loadFile(e.dataTransfer.files[0]);});
-fi.addEventListener('change', e=>loadFile(e.target.files[0]));
+const dz=document.getElementById('drop-zone'), fi=document.getElementById('fi');
+dz.addEventListener('click',()=>fi.click());
+dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('drag');});
+dz.addEventListener('dragleave',()=>dz.classList.remove('drag'));
+dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('drag');loadFile(e.dataTransfer.files[0]);});
+fi.addEventListener('change',e=>loadFile(e.target.files[0]));
 
 function loadFile(file) {
-  if (!file || !file.type.startsWith('video/')) return;
-  videoFile = file;
-  const p = document.getElementById('preview');
-  p.src = URL.createObjectURL(file);
-  p.onloadedmetadata = () => {
-    const d=p.duration, hh=String(Math.floor(d/3600)).padStart(2,'0'),
-          mm=String(Math.floor((d%3600)/60)).padStart(2,'0'), ss=String(Math.floor(d%60)).padStart(2,'0');
-    document.getElementById('vmeta').textContent = `${file.name}  ·  ${hh}:${mm}:${ss}  ·  ${p.videoWidth}×${p.videoHeight}`;
-    videoMeta = {name:file.name, duration:d};
+  if(!file||!file.type.startsWith('video/')) return;
+  videoFile=file;
+  const p=document.getElementById('preview');
+  p.src=URL.createObjectURL(file);
+  p.onloadedmetadata=()=>{
+    const d=p.duration,hh=String(Math.floor(d/3600)).padStart(2,'0'),
+    mm=String(Math.floor((d%3600)/60)).padStart(2,'0'),ss=String(Math.floor(d%60)).padStart(2,'0');
+    document.getElementById('vmeta').textContent=`${file.name}  ·  ${hh}:${mm}:${ss}  ·  ${p.videoWidth}×${p.videoHeight}`;
+    videoMeta={name:file.name,duration:d};
   };
   dz.style.display='none';
   document.getElementById('video-panel').style.display='block';
   clearResults();
 }
-
-function resetVideo() {
+function resetVideo(){
   videoFile=null; dz.style.display='block';
   document.getElementById('video-panel').style.display='none';
   fi.value=''; clearResults();
 }
+// Null-safe helpers — never crash if an element doesn't exist yet
+function elShow(id,display='block'){const e=document.getElementById(id);if(e)e.style.display=display;}
+function elHide(id){const e=document.getElementById(id);if(e)e.style.display='none';}
+function elSet(id,prop,val){const e=document.getElementById(id);if(e)e[prop]=val;}
+function elStyle(id,prop,val){const e=document.getElementById(id);if(e)e.style[prop]=val;}
 
-function clearResults() {
-  allResults=[];
-  ['log','filter-bar','safety-banner','summary','progress-wrap'].forEach(id=>{
-    const el=document.getElementById(id); el.innerHTML=id==='log'?'':el.innerHTML; el.style.display='none';
+function clearResults(){
+  allResults=[]; allDeliveryEvents=[];
+  // Hide / clear panels
+  ['log','progress-wrap','summary-safety','summary-deliveries'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(!el) return;
+    if(id==='log') el.innerHTML='';
+    el.style.display='none';
   });
-  document.getElementById('results').innerHTML='';
-  document.getElementById('results-hdr').style.display='none';
-  document.getElementById('btn-export').style.display='none';
-  document.getElementById('pbar').style.width='0%';
+  // Clear result containers
+  ['results-safety','results-frames','results-deliveries'].forEach(id=>elSet(id,'innerHTML',''));
+  // Reset individual elements — all null-safe
+  elShow('no-deliveries-msg');
+  elHide('btn-export');
+  elHide('all-frame-filters');
+  elHide('tabs');
+  elStyle('pbar','width','0%');
+  ['badge-violations','badge-deliveries','badge-frames'].forEach(id=>elSet(id,'textContent','0'));
 }
 
 // ── Log ───────────────────────────────────────────────────────────────────────
-function addLog(msg, cls='') {
+function addLog(msg,cls=''){
   const el=document.getElementById('log');
+  if(!el) return;
   el.style.display='block';
   const d=document.createElement('div');
   d.className='ll'+(cls?' '+cls:'');
@@ -437,230 +447,360 @@ function addLog(msg, cls='') {
 }
 
 // ── Analyze ───────────────────────────────────────────────────────────────────
-async function startAnalysis() {
-  if (!videoFile) return;
+async function startAnalysis(){
+  if(!videoFile) return;
   const btn=document.getElementById('btn-analyze');
-  if (btn.disabled) return;
+  if(btn.disabled) return;
   clearResults();
   btn.disabled=true; btn.textContent='Analyzing…';
-
   const fd=new FormData();
-  fd.append('video', videoFile);
-  fd.append('fps', document.getElementById('fps').value);
-  fd.append('confidence', document.getElementById('confidence').value);
-  fd.append('use_claude', document.getElementById('use-claude').checked ? 'true' : 'false');
-
+  fd.append('video',videoFile);
+  fd.append('fps',document.getElementById('fps').value);
+  fd.append('confidence',document.getElementById('confidence').value);
+  fd.append('use_claude',document.getElementById('use-claude').checked?'true':'false');
   addLog('Uploading video…');
   try {
-    const res = await fetch('http://localhost:5000/analyze',{method:'POST',body:fd});
-    if (!res.ok) { addLog('Server error: '+res.status,'err'); return; }
+    const res=await fetch('http://localhost:5000/analyze',{method:'POST',body:fd});
+    if(!res.ok){addLog('Server error: '+res.status,'err');return;}
     document.getElementById('progress-wrap').style.display='block';
+    document.getElementById('tabs').style.display='flex';
     const reader=res.body.getReader(), dec=new TextDecoder();
     let buf='';
-    while(true) {
+    while(true){
       const {done,value}=await reader.read();
       if(done) break;
       buf+=dec.decode(value,{stream:true});
       const lines=buf.split('\n'); buf=lines.pop();
-      for(const line of lines) {
+      for(const line of lines){
         if(!line.startsWith('data: ')) continue;
         try{handleEvent(JSON.parse(line.slice(6)));}catch{}
       }
     }
-  } catch(e) { addLog('Connection error: '+e.message,'err'); }
-  finally { btn.disabled=false; btn.textContent='Analyze ◈'; }
+  } catch(e){addLog('Connection error: '+e.message,'err');}
+  finally{btn.disabled=false; btn.textContent='Analyze ◈';}
 }
 
 // ── Event handler ─────────────────────────────────────────────────────────────
-function handleEvent(ev) {
-  if (ev.type==='meta') {
-    const models = ev.safety_model_active ? '✓ safety YOLO' : '⚠ COCO only';
-    const claude = ev.claude_active ? ' + ✓ Claude Vision' : '';
-    addLog(`${ev.duration}s · ${ev.frames_to_analyze} frames · ${models}${claude}`,
-           ev.safety_model_active ? 'ok' : 'warn');
+function handleEvent(ev){
+  if(ev.type==='meta'){
+    const m=ev.safety_model_active?'✓ safety YOLO':'⚠ COCO only';
+    const c=ev.claude_active?'+ ✓ Claude PPE & delivery':'';
+    addLog(`${ev.duration}s · ${ev.frames_to_analyze} frames · ${m} ${c}`,ev.safety_model_active?'ok':'warn');
 
-  } else if (ev.type==='frame') {
+  } else if(ev.type==='frame'){
     const pct=Math.round(ev.sampled/ev.total*100);
-    document.getElementById('pbar').style.width=pct+'%';
-    document.getElementById('prog-text').textContent=`${ev.sampled}/${ev.total} · ${pct}%`;
+    elStyle('pbar','width',pct+'%');
+    elSet('prog-text','textContent',`${ev.sampled}/${ev.total} · ${pct}%`);
 
     const vn=ev.violations?.length||0, sn=ev.suspicious?.length||0;
-    const claudeMark = ev.claude_used ? ' [Claude ✓]' : '';
-    if (vn) addLog(`[${ev.timestamp}] ⚠ ${vn} VIOLATION${vn>1?'S':''}${claudeMark}`,'warn');
-    else if (sn) addLog(`[${ev.timestamp}] ? ${sn} suspicious${claudeMark}`,'warn');
-    else if (ev.count) addLog(`[${ev.timestamp}] ✓ ${ev.count} objects${claudeMark}`,'ok');
-    else addLog(`[${ev.timestamp}] — nothing`);
-
-    if (ev.claude_used && ev.claude_result?.frame_assessment) {
-      addLog(`  ↳ Claude: "${ev.claude_result.frame_assessment}"`, 'claude');
+    const dn=ev.deliveries?.length||0;
+    if(ev.claude_delivery_used && ev.claude_delivery_result){
+      const dr=ev.claude_delivery_result;
+      const mats=dr.materials?.map(m=>m.type).join(', ')||'unclear';
+      addLog(`[${ev.timestamp}] 🚛 Truck → ${mats}${dr.is_steel_delivery?' 🔩 STEEL':''}`, 'delivery');
     }
+    if(vn) addLog(`[${ev.timestamp}] ⚠ ${vn} violation${vn>1?'s':''}${ev.claude_ppe_used?' [Claude ✓]':''}`, 'warn');
+    else if(sn) addLog(`[${ev.timestamp}] ? ${sn} suspicious`, 'warn');
+    else if(!ev.truck_detected && ev.count) addLog(`[${ev.timestamp}] ✓ ${ev.count} objects`, 'ok');
 
     allResults.push(ev);
-    renderCard(ev);
+    renderSafetyCard(ev);
+    renderFrameCard(ev);
     updateSummary();
+    elSet('badge-frames','textContent',allResults.length);
 
-  } else if (ev.type==='done') {
-    addLog(`✓ Done — ${ev.frames_analyzed} frames, ${ev.total_violations} violations`, 'ok');
-    document.getElementById('btn-export').style.display='block';
-    document.getElementById('filter-bar').style.display='block';
-    renderBanner(ev);
-  } else if (ev.type==='error') {
+  } else if(ev.type==='done'){
+    addLog(`✓ Done — ${ev.frames_analyzed} frames · ${ev.total_violations} violations · ${ev.delivery_events?.length||0} delivery events`,'ok');
+    elShow('btn-export');
+    elShow('all-frame-filters','flex');
+    allDeliveryEvents=ev.delivery_events||[];
+    renderDeliveryEvents();
+    elSet('badge-deliveries','textContent',allDeliveryEvents.length);
+    elSet('badge-violations','textContent',ev.total_violations);
+  } else if(ev.type==='error'){
     addLog('Error: '+ev.message,'err');
   }
 }
 
-// ── Banner ────────────────────────────────────────────────────────────────────
-function renderBanner(ev) {
-  const b=document.getElementById('safety-banner');
-  b.style.display='block';
-  const total_suspicious = allResults.reduce((a,r)=>a+(r.suspicious?.length||0),0);
-  if (ev.total_violations>0) {
-    Object.assign(b.style,{background:'#fef2f2',borderColor:'#ef4444'});
-    document.getElementById('b-title').style.color='#991b1b';
-    document.getElementById('b-title').textContent=`⚠ ${ev.total_violations} confirmed safety violation${ev.total_violations>1?'s':''} across ${ev.violation_frames} frame${ev.violation_frames>1?'s':''}`;
-    document.getElementById('b-sub').textContent='Workers detected wearing beanies, baseball caps, or no head protection instead of hard hats. Review flagged frames below.';
-  } else if (total_suspicious>0) {
-    Object.assign(b.style,{background:'#fffbeb',borderColor:'#f59e0b'});
-    document.getElementById('b-title').style.color='#92400e';
-    document.getElementById('b-title').textContent=`? ${total_suspicious} suspicious headwear detection${total_suspicious>1?'s':''} — manual review recommended`;
-    document.getElementById('b-sub').textContent='Claude Vision was not available to confirm. Enable ANTHROPIC_API_KEY for definitive hard hat vs beanie classification.';
-  } else {
-    Object.assign(b.style,{background:'#f0fdf4',borderColor:'#22c55e'});
-    document.getElementById('b-title').style.color='#166534';
-    document.getElementById('b-title').textContent='✓ No safety violations detected';
-    document.getElementById('b-sub').textContent='All visible workers appear compliant with PPE requirements.';
-  }
-}
-
 // ── Summary ───────────────────────────────────────────────────────────────────
-function updateSummary() {
-  document.getElementById('summary').style.display='block';
-  document.getElementById('results-hdr').style.display='flex';
-  document.getElementById('s-frames').textContent     = allResults.length;
-  document.getElementById('s-violations').textContent = allResults.reduce((a,r)=>a+(r.violations?.length||0),0);
-  document.getElementById('s-suspicious').textContent = allResults.reduce((a,r)=>a+(r.suspicious?.length||0),0);
-  document.getElementById('s-ppe').textContent        = allResults.reduce((a,r)=>a+(r.ppe_compliant?.length||0),0);
-  document.getElementById('s-people').textContent     = allResults.reduce((a,r)=>a+(r.people?.length||0),0);
-  document.getElementById('s-equip').textContent      = allResults.reduce((a,r)=>a+(r.equipment?.length||0),0);
-  document.getElementById('results-count').textContent = allResults.length+' frames';
+function updateSummary(){
+  document.getElementById('summary-safety').style.display='block';
+  document.getElementById('s-frames').textContent    =allResults.length;
+  document.getElementById('s-violations').textContent=allResults.reduce((a,r)=>a+(r.violations?.length||0),0);
+  document.getElementById('s-suspicious').textContent=allResults.reduce((a,r)=>a+(r.suspicious?.length||0),0);
+  document.getElementById('s-ppe').textContent       =allResults.reduce((a,r)=>a+(r.ppe_compliant?.length||0),0);
+  document.getElementById('s-people').textContent    =allResults.reduce((a,r)=>a+(r.people?.length||0),0);
+  document.getElementById('s-equip').textContent     =allResults.reduce((a,r)=>a+(r.equipment?.length||0),0);
 }
 
-// ── Render frame card ─────────────────────────────────────────────────────────
-function renderCard(ev) {
+// ── Safety frame cards ────────────────────────────────────────────────────────
+function renderSafetyCard(ev){
   const risk=ev.risk||'none';
+  const vn=ev.violations?.length||0,sn=ev.suspicious?.length||0,
+        pn=ev.ppe_compliant?.length||0,kn=ev.people?.length||0,en=ev.equipment?.length||0;
+  if(vn===0&&sn===0&&pn===0&&kn===0) return; // skip empty safety frames
+
   const card=document.createElement('div');
   card.className=`frame-card risk-${risk}`;
-  card.dataset.risk=risk;
-  card.dataset.hasdet=ev.count>0?'1':'0';
-  card.dataset.claude=ev.claude_used?'1':'0';
-
-  const vn=ev.violations?.length||0, sn=ev.suspicious?.length||0,
-        pn=ev.ppe_compliant?.length||0, kn=ev.people?.length||0, en=ev.equipment?.length||0;
+  card.dataset.risk=risk; card.dataset.claude=ev.claude_ppe_used?'1':'0';
 
   const head=document.createElement('div');
   head.className=`fcard-head risk-${risk}`;
   head.innerHTML=`
     <span class="ts">${ev.timestamp}</span>
-    <span class="risk-chip ${risk}">${risk==='high'?'⚠ violation':risk==='medium'?'? suspicious':risk==='low'?'✓ low':'— none'}</span>
-    ${ev.claude_used?'<span class="claude-badge">Claude ✓</span>':''}
+    <span class="risk-chip ${risk}">${risk==='high'?'⚠ violation':risk==='medium'?'? suspicious':risk==='low'?'✓ ok':'—'}</span>
+    ${ev.claude_ppe_used?'<span class="claude-badge">Claude ✓</span>':''}
     <div class="mini-counts">
-      ${vn?`<span class="mc mc-v">⚠ ${vn} violation${vn>1?'s':''}</span>`:''}
-      ${sn?`<span class="mc mc-s">? ${sn} suspicious</span>`:''}
+      ${vn?`<span class="mc mc-v">⚠ ${vn}</span>`:''}
+      ${sn?`<span class="mc mc-s">? ${sn}</span>`:''}
       ${pn?`<span class="mc mc-p">✓ ${pn} PPE</span>`:''}
       ${kn?`<span class="mc mc-k">${kn} person${kn>1?'s':''}</span>`:''}
-      ${en?`<span class="mc mc-e">${en} equip</span>`:''}
     </div>
-    <span class="toggle-arrow">▲</span>
-  `;
+    <span class="toggle-arrow">▲</span>`;
 
-  const body=document.createElement('div');
-  body.className='fcard-body';
-
-  if (ev.count===0) {
-    body.innerHTML='<span class="no-det">No objects detected</span>';
-  } else {
-    const sections=[
-      {key:'violations',    label:'⚠ Safety Violations',     color:'#dc2626', cat:'violation'},
-      {key:'suspicious',    label:'? Suspicious Headwear',    color:'#d97706', cat:'suspicious'},
-      {key:'ppe_compliant', label:'✓ PPE Compliant',          color:'#16a34a', cat:'ppe'},
-      {key:'people',        label:'👤 People',                color:'#2563eb', cat:'person'},
-      {key:'equipment',     label:'🚛 Equipment / Vehicles',  color:'#7c3aed', cat:'equipment'},
-      {key:'other',         label:'📦 Other',                 color:'#6b7280', cat:'other'},
-    ];
-    sections.forEach(({key,label,color,cat})=>{
-      const items=ev[key]; if(!items||!items.length) return;
-      const sec=document.createElement('div'); sec.className='det-section';
-      sec.innerHTML=`<div class="det-section-title" style="color:${color}">${label}</div>
-        <div class="det-pills">${items.map(d=>`
-          <span class="dpill ${cat}">
-            ${d.class}${d.confidence!=null?`<span class="conf">${Math.round(d.confidence*100)}%</span>`:''}
-            ${d.note?`<span class="note">${d.note}</span>`:''}
-          </span>`).join('')}
-        </div>`;
-      body.appendChild(sec);
-    });
-
-    // Claude detail box
-    if (ev.claude_used && ev.claude_result) {
-      const cd=document.createElement('div'); cd.className='claude-detail';
-      const people=ev.claude_result.people||[];
-      cd.innerHTML=`<div class="claude-detail-title">Claude Vision Assessment</div>
-        ${people.map((p,i)=>`
-          <div class="claude-person">
-            Person ${i+1}:
-            <strong>${p.head_protection}</strong>
-            ${p.is_compliant?'<span style="color:#16a34a">✓ compliant</span>':'<span style="color:#dc2626">✗ violation</span>'}
-            · vest: ${p.safety_vest}
-            ${p.notes?`<span style="color:#888"> — ${p.notes}</span>`:''}
-          </div>`).join('')}
-        ${ev.claude_result.frame_assessment
-          ?`<div class="claude-assessment">"${ev.claude_result.frame_assessment}"</div>`:''}`;
-      body.appendChild(cd);
-    }
-  }
+  const body=document.createElement('div'); body.className='fcard-body';
+  renderDetSections(body,ev,['violations','suspicious','ppe_compliant','people']);
+  if(ev.claude_ppe_used&&ev.claude_ppe_result) renderClaudeBox(body,ev.claude_ppe_result,'ppe');
 
   let open=true;
   head.addEventListener('click',()=>{
-    open=!open;
-    body.style.display=open?'block':'none';
+    open=!open; body.style.display=open?'block':'none';
     head.classList.toggle('collapsed',!open);
     head.querySelector('.toggle-arrow').textContent=open?'▲':'▼';
   });
-
   card.appendChild(head); card.appendChild(body);
-  document.getElementById('results').appendChild(card);
+  document.getElementById('results-safety').appendChild(card);
   applyFilter();
 }
 
-// ── Filter ────────────────────────────────────────────────────────────────────
-function setFilter(btn,f) {
+// ── All-frames cards ──────────────────────────────────────────────────────────
+function renderFrameCard(ev){
+  const risk=ev.risk||'none';
+  const dn=ev.deliveries?.length||0, isSteel=ev.claude_delivery_result?.is_steel_delivery;
+  const card=document.createElement('div');
+  card.className=`frame-card risk-${risk}${dn>0?' has-delivery':''}`;
+  card.dataset.risk=risk; card.dataset.hasdet=ev.count>0?'1':'0';
+  card.dataset.truck=ev.truck_detected?'1':'0';
+
+  const head=document.createElement('div');
+  head.className=`fcard-head risk-${risk}${dn>0?' has-delivery':''}`;
+  head.innerHTML=`
+    <span class="ts">${ev.timestamp}</span>
+    <span class="risk-chip ${risk}">${risk}</span>
+    ${dn>0?`<span class="delivery-chip${isSteel?' steel':''}">🚛 ${isSteel?'Steel':'Material'}</span>`:''}
+    ${ev.claude_ppe_used||ev.claude_delivery_used?'<span class="claude-badge">Claude ✓</span>':''}
+    <div class="mini-counts">
+      ${(ev.violations?.length||0)?`<span class="mc mc-v">⚠ ${ev.violations.length}</span>`:''}
+      ${(ev.people?.length||0)?`<span class="mc mc-k">${ev.people.length}p</span>`:''}
+      ${(ev.equipment?.length||0)?`<span class="mc mc-e">${ev.equipment.length}eq</span>`:''}
+      ${dn?`<span class="mc mc-d">📦 ${dn}</span>`:''}
+      <span style="font-size:11px;color:#bbb">${ev.count} obj</span>
+    </div>
+    <span class="toggle-arrow">▲</span>`;
+
+  const body=document.createElement('div'); body.className='fcard-body';
+  if(ev.count===0){
+    body.innerHTML='<span class="no-det">No objects detected</span>';
+  } else {
+    renderDetSections(body,ev,['violations','suspicious','ppe_compliant','people','equipment','deliveries','other']);
+    if(ev.claude_ppe_used&&ev.claude_ppe_result) renderClaudeBox(body,ev.claude_ppe_result,'ppe');
+    if(ev.claude_delivery_used&&ev.claude_delivery_result) renderClaudeBox(body,ev.claude_delivery_result,'delivery');
+  }
+
+  let open=false; body.style.display='none'; head.querySelector('.toggle-arrow').textContent='▼';
+  head.addEventListener('click',()=>{
+    open=!open; body.style.display=open?'block':'none';
+    head.classList.toggle('collapsed',!open);
+    head.querySelector('.toggle-arrow').textContent=open?'▲':'▼';
+  });
+  card.appendChild(head); card.appendChild(body);
+  document.getElementById('results-frames').appendChild(card);
+  applyFrameFilter();
+}
+
+// ── Det section renderer ──────────────────────────────────────────────────────
+function renderDetSections(body,ev,keys){
+  const SECTIONS={
+    violations:   {label:'⚠ Violations',      color:'#dc2626'},
+    suspicious:   {label:'? Suspicious',       color:'#d97706'},
+    ppe_compliant:{label:'✓ PPE Compliant',    color:'#16a34a'},
+    people:       {label:'👤 People',           color:'#2563eb'},
+    equipment:    {label:'🚛 Equipment',        color:'#7c3aed'},
+    deliveries:   {label:'📦 Detected Materials',color:'#713f12'},
+    other:        {label:'Other',              color:'#6b7280'},
+  };
+  keys.forEach(key=>{
+    const items=ev[key]||[]; if(!items.length) return;
+    const {label,color}=SECTIONS[key]||{label:key,color:'#555'};
+    const sec=document.createElement('div'); sec.className='det-section';
+    sec.innerHTML=`<div class="det-section-title" style="color:${color}">${label}</div>
+      <div class="det-pills">${items.map(d=>`
+        <span class="dpill ${d.category||key.replace('_compliant','').replace('deliveries','delivery')}">
+          ${d.class}
+          ${d.confidence!=null?`<span class="conf">${Math.round(d.confidence*100)}%</span>`:''}
+          ${d.description?`<span class="note">${d.description}</span>`:''}
+          ${d.note?`<span class="note">${d.note}</span>`:''}
+        </span>`).join('')}
+      </div>`;
+    body.appendChild(sec);
+  });
+}
+
+// ── Claude detail boxes ───────────────────────────────────────────────────────
+function renderClaudeBox(body,result,type){
+  const box=document.createElement('div');
+  box.className=`claude-box ${type}`;
+  if(type==='ppe'){
+    const people=result.people||[];
+    box.innerHTML=`<div class="cb-title" style="color:#5b21b6">Claude PPE Assessment</div>
+      ${people.map((p,i)=>`<div class="cb-row">
+        Person ${i+1}: <strong>${p.head_protection}</strong>
+        ${p.is_compliant?'<span style="color:#16a34a">✓</span>':'<span style="color:#dc2626">✗ VIOLATION</span>'}
+        · vest: ${p.safety_vest} ${p.notes?`<span style="color:#888">— ${p.notes}</span>`:''}
+      </div>`).join('')}
+      ${result.frame_assessment?`<div class="cb-summary" style="color:#5b21b6">"${result.frame_assessment}"</div>`:''}`;
+  } else {
+    const mats=result.materials||[];
+    box.innerHTML=`<div class="cb-title" style="color:#92400e">Claude Delivery Assessment</div>
+      <div class="cb-row"><strong>Vehicle:</strong> ${result.vehicle_type||'unknown'} · Unloading: ${result.unloading_in_progress?'✓ yes':'no'} · Workers: ${result.workers_present?'✓ yes':'no'}</div>
+      ${mats.map(m=>`<div class="cb-row ${m.type.startsWith('steel')||m.type==='rebar'?'':''}">
+        📦 <strong>${m.type}</strong> (${m.confidence}) — ${m.description||''}
+      </div>`).join('')}
+      ${result.delivery_assessment?`<div class="cb-summary" style="color:#92400e">"${result.delivery_assessment}"</div>`:''}`;
+  }
+  body.appendChild(box);
+}
+
+// ── Delivery events tab ───────────────────────────────────────────────────────
+const STEEL_TYPES=new Set(['rebar','steel_beam','i_beam','steel_plate','steel_coil','steel_pipe','steel_other']);
+
+function renderDeliveryEvents(){
+  const container=document.getElementById('results-deliveries');
+  const noMsg=document.getElementById('no-deliveries-msg');
+  document.getElementById('summary-deliveries').style.display='block';
+
+  const steelCount=allDeliveryEvents.filter(e=>e.is_steel_delivery).length;
+  const otherCount=allDeliveryEvents.length-steelCount;
+  const truckFrames=allResults.filter(r=>r.truck_detected).length;
+  document.getElementById('d-events').textContent=allDeliveryEvents.length;
+  document.getElementById('d-steel').textContent=steelCount;
+  document.getElementById('d-other').textContent=otherCount;
+  document.getElementById('d-frames').textContent=truckFrames;
+
+  if(allDeliveryEvents.length===0){ noMsg.style.display='block'; return; }
+  noMsg.style.display='none';
+
+  allDeliveryEvents.forEach(ev=>{
+    const isSteel=ev.is_steel_delivery;
+    const primary=ev.primary_material||'unclear';
+    const el=document.createElement('div'); el.className='delivery-event';
+
+    const duration=ev.duration_sec>=60
+      ? `${Math.floor(ev.duration_sec/60)}m ${ev.duration_sec%60}s`
+      : `${ev.duration_sec}s`;
+
+    const materialsHtml=(ev.top_materials||[]).map(m=>{
+      const s=STEEL_TYPES.has(m.material)||m.material==='rebar';
+      return `<span class="mat-pill ${s?'steel':m.material==='unclear'?'unclear':'other'}">
+        ${s?'🔩 ':'📦 '}${m.material.replace(/_/g,' ')} ×${m.frames}
+      </span>`;
+    }).join('')||'<span class="mat-pill unclear">unclear</span>';
+
+    // Frame-level results
+    const frameRowsHtml=(ev.frame_results||[]).map(fr=>{
+      const dr=fr.result; if(!dr) return '';
+      const mats=dr.materials?.map(m=>m.type).join(', ')||'unclear';
+      const s=dr.is_steel_delivery;
+      return `<div class="de-frame-row${s?' steel':''}">
+        <span style="font-family:monospace;font-size:11px;color:#888">${fr.timestamp}</span>
+        &nbsp;·&nbsp; ${mats}
+        ${s?'<span style="color:#713f12;font-weight:700"> 🔩 STEEL</span>':''}
+        ${dr.unloading_in_progress?'<span style="color:#2563eb"> · unloading</span>':''}
+        ${dr.delivery_assessment?`<br><span style="font-size:11px;color:#888;font-style:italic">"${dr.delivery_assessment}"</span>`:''}
+      </div>`;
+    }).join('');
+
+    el.innerHTML=`
+      <div class="de-header">
+        <div class="de-number${isSteel?' steel':''}">${ev.event_id}</div>
+        <div class="de-info">
+          <div class="de-title${isSteel?' steel':{}}">
+            ${isSteel?'🔩 Steel Delivery':'📦 Material Delivery'}
+          </div>
+          <div class="de-meta">
+            <span>🚛 ${ev.vehicle_type||'vehicle'}</span>
+            <span>⏱ ${duration}</span>
+            <span>🎞 ${ev.frames_analyzed} frames analyzed</span>
+            ${ev.unloading_seen?'<span>⬇ unloading observed</span>':''}
+            ${ev.workers_seen?'<span>👷 workers present</span>':''}
+          </div>
+        </div>
+      </div>
+      <div class="de-body">
+        <div class="de-timeline">
+          <span class="tl-label">Arrived</span>
+          <span class="tl-time">${ev.arrival_time}</span>
+          <span class="tl-arrow">→</span>
+          <span class="tl-label">Departed</span>
+          <span class="tl-time">${ev.departure_time||'still on site'}</span>
+          <span style="margin-left:8px;background:#f0f0f0;border-radius:5px;padding:2px 8px;font-size:11px;color:#555">${duration}</span>
+        </div>
+        <div class="de-materials">${materialsHtml}</div>
+        ${frameRowsHtml?`<div class="de-frames">
+          <div class="de-frames-title">Frame-by-frame analysis</div>
+          ${frameRowsHtml}
+        </div>`:''}
+      </div>`;
+    container.appendChild(el);
+  });
+}
+
+// ── Filters ───────────────────────────────────────────────────────────────────
+function setFilter(btn,f){
   activeFilter=f;
-  document.querySelectorAll('.f-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('#safety-filters .f-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   applyFilter();
 }
-function applyFilter() {
-  document.querySelectorAll('.frame-card').forEach(card=>{
-    const r=card.dataset.risk, h=card.dataset.hasdet==='1', c=card.dataset.claude==='1';
+function applyFilter(){
+  document.querySelectorAll('#results-safety .frame-card').forEach(c=>{
+    const r=c.dataset.risk, cl=c.dataset.claude==='1';
     let show=false;
-    if (activeFilter==='all') show=true;
-    else if (activeFilter==='high') show=r==='high';
-    else if (activeFilter==='medium') show=r==='medium';
-    else if (activeFilter==='detections') show=h;
-    else if (activeFilter==='claude') show=c;
-    card.style.display=show?'block':'none';
+    if(activeFilter==='all') show=true;
+    else if(activeFilter==='high') show=r==='high';
+    else if(activeFilter==='medium') show=r==='medium';
+    else if(activeFilter==='claude') show=cl;
+    c.style.display=show?'block':'none';
+  });
+}
+function setFrameFilter(btn,f){
+  activeFrameFilter=f;
+  document.querySelectorAll('#all-frame-filters .f-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  applyFrameFilter();
+}
+function applyFrameFilter(){
+  document.querySelectorAll('#results-frames .frame-card').forEach(c=>{
+    const h=c.dataset.hasdet==='1', t=c.dataset.truck==='1';
+    let show=false;
+    if(activeFrameFilter==='all') show=true;
+    else if(activeFrameFilter==='detections') show=h;
+    else if(activeFrameFilter==='delivery') show=t;
+    c.style.display=show?'block':'none';
   });
 }
 
 // ── Export ────────────────────────────────────────────────────────────────────
-function exportJSON() {
+function exportJSON(){
   const blob=new Blob([JSON.stringify({
-    video:videoMeta.name, generated:new Date().toISOString(),
-    frames_analyzed:allResults.length, frames:allResults
+    video:videoMeta.name,generated:new Date().toISOString(),
+    frames_analyzed:allResults.length,
+    delivery_events:allDeliveryEvents,
+    frames:allResults
   },null,2)],{type:'application/json'});
   const a=document.createElement('a');
   a.href=URL.createObjectURL(blob);
-  a.download=`oxblue_safety_v3_${Date.now()}.json`;
+  a.download=`oxblue_v4_${Date.now()}.json`;
   a.click();
 }
 </script>
