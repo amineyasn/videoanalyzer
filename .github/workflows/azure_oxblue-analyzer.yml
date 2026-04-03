@@ -63,4 +63,4 @@ jobs:
         with:
           app-name: 'oxblue-analyzer'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E9661294EF214687826C2D85096B8E19 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_7A598672250549E1AEAF2D67BC12CC3E }}
