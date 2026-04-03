@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -196,7 +197,7 @@ input:checked+.tsl:before{transform:translateX(16px);}
 
   <!-- Header -->
   <div class="header">
-    <img src="oxblue-logo.png" alt="OxBlue" style="height:52px;width:auto;object-fit:contain;flex-shrink:0;border-radius:8px;">
+    <img src="oxblue-logo-ai.png" alt="OxBlue" style="height:52px;width:auto;object-fit:contain;flex-shrink:0;border-radius:8px;">
     <div class="header-text">
       <h1>Site Analyzer <span style="font-size:13px;font-weight:400;color:#888">v4</span></h1>
       <p>Safety monitoring · Hard hat detection · Steel & material delivery tracking</p>
@@ -517,10 +518,11 @@ function handleEvent(ev){
     addLog(`✓ Done — ${ev.frames_analyzed} frames · ${ev.total_violations} violations · ${ev.delivery_events?.length||0} delivery events`,'ok');
     elShow('btn-export');
     elShow('all-frame-filters','flex');
-    allDeliveryEvents=ev.delivery_events||[];
-    renderDeliveryEvents();
-    elSet('badge-deliveries','textContent',allDeliveryEvents.length);
-    elSet('badge-violations','textContent',ev.total_violations);
+    allDeliveryEvents = ev.delivery_events || [];
+    // Set badges FIRST before any render that could throw
+    elSet('badge-deliveries','textContent', allDeliveryEvents.length);
+    elSet('badge-violations','textContent', ev.total_violations || 0);
+    try { renderDeliveryEvents(); } catch(e) { console.error('renderDeliveryEvents error:', e); }
   } else if(ev.type==='error'){
     addLog('Error: '+ev.message,'err');
   }
@@ -686,10 +688,12 @@ function renderDeliveryEvents(){
   const steelCount=allDeliveryEvents.filter(e=>e.is_steel_delivery).length;
   const otherCount=allDeliveryEvents.length-steelCount;
   const truckFrames=allResults.filter(r=>r.truck_detected).length;
-  document.getElementById('d-events').textContent=allDeliveryEvents.length;
-  document.getElementById('d-steel').textContent=steelCount;
-  document.getElementById('d-other').textContent=otherCount;
-  document.getElementById('d-frames').textContent=truckFrames;
+  elSet('d-events','textContent',allDeliveryEvents.length);
+  elSet('d-steel','textContent',steelCount);
+  elSet('d-other','textContent',otherCount);
+  elSet('d-frames','textContent',truckFrames);
+  // Also update tab badge here as failsafe
+  elSet('badge-deliveries','textContent',allDeliveryEvents.length);
 
   if(allDeliveryEvents.length===0){ noMsg.style.display='block'; return; }
   noMsg.style.display='none';
