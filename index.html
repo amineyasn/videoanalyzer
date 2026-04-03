@@ -3,111 +3,192 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>OxBlue Site Analyzer</title>
+<title>OxBlue Site Analyzer v3</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f6f7f9; min-height: 100vh; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f4f5f7; min-height: 100vh; }
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
 
-  .wrap { max-width: 880px; margin: 0 auto; padding: 28px 18px 60px; }
+.wrap { max-width: 940px; margin: 0 auto; padding: 28px 18px 60px; }
 
-  /* Header */
-  .header { display: flex; align-items: center; gap: 12px; margin-bottom: 26px; }
-  .logo { width: 40px; height: 40px; border-radius: 10px; background: #1a1a2e;
-    display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 18px; }
-  .header h1 { font-size: 20px; font-weight: 700; color: #1a1a2e; letter-spacing: -0.02em; }
-  .header p  { font-size: 12px; color: #999; margin-top: 1px; }
+/* Header */
+.header { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; }
+.logo { width: 42px; height: 42px; border-radius: 11px; background: #1a1a2e;
+  display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+.header-text h1 { font-size: 20px; font-weight: 700; color: #1a1a2e; letter-spacing: -0.02em; }
+.header-text p  { font-size: 12px; color: #888; margin-top: 1px; }
 
-  /* Settings bar */
-  .settings { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px;
-    padding: 14px 16px; margin-bottom: 18px; display: flex; gap: 20px; flex-wrap: wrap; align-items: center; }
-  .setting-group { display: flex; flex-direction: column; gap: 5px; }
-  .setting-group label { font-size: 11px; font-weight: 600; color: #666; text-transform: uppercase; letter-spacing: 0.05em; }
-  .setting-group select, .setting-group input[type=number] {
-    border: 1px solid #e5e7eb; border-radius: 7px; padding: 6px 10px;
-    font-size: 13px; background: #fafafa; outline: none; color: #1a1a2e; }
+/* Pipeline diagram */
+.pipeline { display: flex; align-items: center; gap: 0; margin-bottom: 20px;
+  background: #fff; border: 1px solid #e0e3e8; border-radius: 12px; overflow: hidden; }
+.pipe-step { flex: 1; padding: 10px 12px; border-right: 1px solid #e0e3e8; }
+.pipe-step:last-child { border-right: none; }
+.pipe-step .ps-num { font-size: 10px; font-weight: 700; color: #aaa; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 2px; }
+.pipe-step .ps-name { font-size: 12px; font-weight: 600; color: #1a1a2e; }
+.pipe-step .ps-desc { font-size: 11px; color: #888; margin-top: 1px; }
+.pipe-step.active .ps-name { color: #2563eb; }
+.pipe-arrow { font-size: 14px; color: #d1d5db; padding: 0 2px; flex-shrink: 0; }
 
-  /* Upload zone */
-  #drop-zone { border: 2px dashed #d1d5db; border-radius: 16px; padding: 56px 24px;
-    text-align: center; cursor: pointer; background: #fafafa; transition: all 0.15s; }
-  #drop-zone.drag { border-color: #e2b96f; background: #fffbf0; }
-  #drop-zone .icon { font-size: 38px; margin-bottom: 12px; }
-  #drop-zone h2 { font-size: 16px; font-weight: 600; color: #1a1a2e; margin-bottom: 6px; }
-  #drop-zone p  { font-size: 13px; color: #888; }
+/* Settings */
+.settings { background: #fff; border: 1px solid #e0e3e8; border-radius: 12px;
+  padding: 14px 18px; margin-bottom: 18px; display: flex; gap: 20px; flex-wrap: wrap; align-items: center; }
+.sg { display: flex; flex-direction: column; gap: 5px; }
+.sg label { font-size: 10px; font-weight: 700; color: #777; text-transform: uppercase; letter-spacing: 0.06em; }
+.sg select { border: 1px solid #e0e3e8; border-radius: 7px; padding: 6px 10px;
+  font-size: 13px; background: #fafafa; outline: none; color: #1a1a2e; min-width: 160px; }
+.toggle-row { display: flex; align-items: center; gap: 8px; }
+.toggle-switch { position: relative; width: 36px; height: 20px; flex-shrink: 0; }
+.toggle-switch input { opacity: 0; width: 0; height: 0; }
+.toggle-slider { position: absolute; inset: 0; background: #d1d5db; border-radius: 20px; cursor: pointer; transition: 0.2s; }
+.toggle-slider:before { content: ''; position: absolute; width: 14px; height: 14px;
+  left: 3px; bottom: 3px; background: #fff; border-radius: 50%; transition: 0.2s; }
+input:checked + .toggle-slider { background: #2563eb; }
+input:checked + .toggle-slider:before { transform: translateX(16px); }
+.toggle-label { font-size: 12px; color: #444; }
+.toggle-label span { font-size: 11px; color: #888; display: block; margin-top: 1px; }
 
-  /* Video panel */
-  #video-panel { border: 1px solid #e5e7eb; border-radius: 14px; overflow: hidden; margin-bottom: 16px; display: none; }
-  #preview { width: 100%; display: block; background: #000; max-height: 360px; }
-  .video-bar { padding: 10px 14px; background: #fafafa; border-top: 1px solid #e5e7eb;
-    display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-  .video-meta { font-size: 11px; color: #888; font-family: monospace; flex: 1;
-    overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .btn-group { display: flex; gap: 8px; flex-shrink: 0; }
-  .btn { border: 1px solid #e5e7eb; border-radius: 8px; padding: 7px 14px;
-    font-size: 13px; cursor: pointer; transition: all 0.15s; background: transparent; color: #555; }
-  .btn:hover { background: #f5f5f5; }
-  .btn-primary { background: #1a1a2e; color: #e2b96f; border-color: #1a1a2e; font-weight: 700; }
-  .btn-primary:hover { background: #2a2a4e; }
-  .btn-primary:disabled { background: #888; border-color: #888; cursor: not-allowed; }
-  .btn-export { background: #1a1a2e; color: #e2b96f; border-color: #1a1a2e; font-weight: 700; margin-left: auto; }
+.status-row { display: flex; gap: 10px; margin-left: auto; flex-wrap: wrap; }
+.status-pill { display: flex; align-items: center; gap: 5px; font-size: 11px;
+  background: #f9fafb; border: 1px solid #e0e3e8; border-radius: 20px; padding: 4px 10px; }
+.sdot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.sdot.on  { background: #22c55e; }
+.sdot.off { background: #ef4444; }
+.sdot.na  { background: #f59e0b; }
 
-  /* Progress */
-  #progress-wrap { margin-bottom: 14px; display: none; }
-  .progress-header { display: flex; justify-content: space-between; margin-bottom: 6px; }
-  .progress-label { font-size: 12px; color: #666; }
-  .progress-count { font-size: 12px; font-family: monospace; font-weight: 600; color: #1a1a2e; }
-  .progress-bar-bg { height: 6px; background: #eee; border-radius: 3px; overflow: hidden; }
-  .progress-bar-fill { height: 100%; background: linear-gradient(90deg, #1a1a2e, #e2b96f);
-    border-radius: 3px; transition: width 0.3s; width: 0%; }
+/* Buttons */
+.btn { border: 1px solid #e0e3e8; border-radius: 8px; padding: 7px 14px;
+  font-size: 13px; cursor: pointer; background: #fff; color: #444; transition: all 0.15s; }
+.btn:hover { background: #f5f5f5; }
+.btn-dark { background: #1a1a2e; color: #e2b96f; border-color: #1a1a2e; font-weight: 700; }
+.btn-dark:hover { background: #2a2a4e; }
+.btn-dark:disabled { background: #888; border-color: #888; cursor: not-allowed; }
 
-  /* Log */
-  #log { background: #0d0d1a; border-radius: 10px; padding: 12px 14px; margin-bottom: 18px;
-    max-height: 150px; overflow-y: auto; display: none; }
-  .log-line { font-size: 11px; font-family: monospace; line-height: 1.7; color: #778; }
-  .log-line.ok  { color: #4caf50; }
-  .log-line.warn { color: #f0a500; }
+/* Upload */
+#drop-zone { border: 2px dashed #d1d5db; border-radius: 16px; padding: 56px 24px;
+  text-align: center; cursor: pointer; background: #fafafa; transition: all 0.15s; }
+#drop-zone.drag { border-color: #e2b96f; background: #fffbf0; }
+#drop-zone h2 { font-size: 16px; font-weight: 600; color: #1a1a2e; margin: 10px 0 5px; }
+#drop-zone p  { font-size: 13px; color: #888; }
 
-  /* Summary cards */
-  #summary { display: none; margin-bottom: 18px; }
-  .stat-row { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
-  .stat-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px;
-    padding: 12px 14px; text-align: center; flex: 1; min-width: 80px; }
-  .stat-num  { font-size: 22px; font-weight: 700; }
-  .stat-lbl  { font-size: 10px; color: #888; margin-top: 2px; text-transform: uppercase; letter-spacing: 0.06em; }
-  .top-objects { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
-  .top-label { font-size: 11px; color: #888; }
-  .obj-pill { background: #1a1a2e; color: #e2b96f; border-radius: 6px; padding: 3px 9px; font-size: 11px; font-weight: 600; }
+/* Video */
+#video-panel { border: 1px solid #e0e3e8; border-radius: 14px; overflow: hidden; margin-bottom: 16px; display: none; }
+#preview { width: 100%; display: block; background: #000; max-height: 380px; }
+.video-bar { padding: 10px 14px; background: #fafafa; border-top: 1px solid #e0e3e8;
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.video-meta { font-size: 11px; color: #888; font-family: monospace; flex: 1;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-  /* Results header */
-  .results-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-  .results-header h3 { font-size: 14px; font-weight: 600; color: #1a1a2e; }
-  .results-header span { font-size: 12px; color: #999; }
+/* Progress */
+#progress-wrap { display: none; margin-bottom: 14px; }
+.prog-row { display: flex; justify-content: space-between; margin-bottom: 6px; }
+.prog-row span { font-size: 12px; color: #666; }
+.prog-row span:last-child { font-family: monospace; font-weight: 600; color: #1a1a2e; }
+.pbar { height: 6px; background: #e8eaed; border-radius: 3px; overflow: hidden; }
+.pbar-fill { height: 100%; background: linear-gradient(90deg, #1a1a2e, #e2b96f);
+  width: 0%; border-radius: 3px; transition: width 0.3s; }
 
-  /* Detection cards */
-  .frame-card { border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden;
-    background: #fff; margin-bottom: 8px; transition: box-shadow 0.2s; }
-  .frame-card.high-risk { box-shadow: 0 0 0 2px #f4a7a7; }
-  .frame-head { display: flex; align-items: center; gap: 8px; padding: 9px 14px;
-    cursor: pointer; background: #fafafa; border-bottom: 1px solid #e5e7eb; user-select: none; }
-  .frame-head.high-risk { background: #fff8f8; }
-  .frame-head.collapsed { border-bottom: none; }
-  .ts-badge { font-family: monospace; font-size: 12px; background: #1a1a2e; color: #e2b96f;
-    padding: 2px 8px; border-radius: 5px; flex-shrink: 0; }
-  .risk-badge { border-radius: 20px; padding: 2px 10px; font-size: 11px; font-weight: 700;
-    text-transform: uppercase; letter-spacing: 0.05em; white-space: nowrap; border: 1px solid; }
-  .risk-low    { background: #e6f4ea; color: #1a6130; border-color: #9dcfaa; }
-  .risk-medium { background: #fff8e1; color: #7a4f00; border-color: #ffd54f; }
-  .risk-high   { background: #fdecea; color: #8b1a1a; border-color: #f4a7a7; }
-  .obj-count { margin-left: auto; font-size: 11px; color: #999; }
-  .toggle-arrow { color: #bbb; font-size: 10px; }
-  .frame-body { padding: 12px 14px; }
-  .detections-list { display: flex; flex-wrap: wrap; gap: 5px; }
-  .det-pill { background: #f0f4ff; color: #2c3e8c; border: 1px solid #c5d0f5;
-    border-radius: 6px; padding: 3px 10px; font-size: 12px; }
-  .det-pill.relevant { background: #fff8e0; color: #7a4f00; border-color: #ffd54f; }
-  .empty-frame { font-size: 12px; color: #aaa; font-style: italic; }
+/* Log */
+#log { background: #0e0e1c; border-radius: 10px; padding: 12px 14px; margin-bottom: 18px;
+  max-height: 170px; overflow-y: auto; display: none; }
+.ll { font-size: 11px; font-family: monospace; line-height: 1.75; color: #5a6070; }
+.ll.ok   { color: #4ade80; }
+.ll.warn { color: #facc15; }
+.ll.err  { color: #f87171; }
+.ll.claude { color: #818cf8; }
 
-  ::-webkit-scrollbar { width: 5px; }
-  ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+/* Safety banner */
+#safety-banner { display: none; border-radius: 12px; padding: 14px 18px; margin-bottom: 18px; border-left: 4px solid; }
+.banner-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+.banner-sub   { font-size: 12px; opacity: 0.75; }
+
+/* Stats */
+#summary { display: none; margin-bottom: 20px; }
+.stat-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-bottom: 14px; }
+.stat-card { background: #fff; border: 1px solid #e0e3e8; border-radius: 10px; padding: 11px 8px; text-align: center; }
+.stat-num { font-size: 20px; font-weight: 700; }
+.stat-lbl { font-size: 10px; color: #888; margin-top: 3px; text-transform: uppercase; letter-spacing: 0.04em; line-height: 1.3; }
+.stat-card.danger { border-color: #fca5a5; background: #fef2f2; }
+.stat-card.warn   { border-color: #fde68a; background: #fffbeb; }
+.stat-card.safe   { border-color: #86efac; background: #f0fdf4; }
+
+/* Legend */
+.legend { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.leg { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #555; }
+.leg-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+
+/* Filter */
+#filter-bar { display: none; margin-bottom: 12px; }
+.filter-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.f-btn { border: 1px solid #e0e3e8; border-radius: 20px; padding: 4px 12px;
+  font-size: 12px; cursor: pointer; background: #fff; color: #555; transition: all 0.15s; }
+.f-btn.active { background: #1a1a2e; color: #e2b96f; border-color: #1a1a2e; }
+
+/* Results header */
+.results-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.results-hdr h3 { font-size: 14px; font-weight: 600; color: #1a1a2e; }
+
+/* Frame cards */
+.frame-card { background: #fff; border: 1px solid #e0e3e8; border-radius: 12px;
+  overflow: hidden; margin-bottom: 8px; }
+.frame-card.risk-high     { border-color: #fca5a5; box-shadow: 0 0 0 1px #fca5a5; }
+.frame-card.risk-medium   { border-color: #fde68a; }
+.frame-card.risk-low      { }
+.frame-card.risk-none     { opacity: 0.65; }
+
+.fcard-head { display: flex; align-items: center; gap: 8px; padding: 9px 14px;
+  cursor: pointer; user-select: none; background: #fafafa; border-bottom: 1px solid #e0e3e8; flex-wrap: wrap; }
+.fcard-head.collapsed { border-bottom: none; }
+.fcard-head.risk-high   { background: #fff5f5; }
+.fcard-head.risk-medium { background: #fffdf0; }
+
+.ts { font-family: monospace; font-size: 12px; background: #1a1a2e; color: #e2b96f;
+  padding: 2px 8px; border-radius: 5px; flex-shrink: 0; }
+.risk-chip { border-radius: 20px; padding: 2px 9px; font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.06em; border: 1px solid; white-space: nowrap; }
+.risk-chip.high     { background:#fef2f2; color:#991b1b; border-color:#fca5a5; }
+.risk-chip.medium   { background:#fffbeb; color:#92400e; border-color:#fde68a; }
+.risk-chip.low      { background:#f0fdf4; color:#166534; border-color:#86efac; }
+.risk-chip.none     { background:#f9fafb; color:#6b7280; border-color:#d1d5db; }
+
+.claude-badge { font-size: 10px; background: #ede9fe; color: #5b21b6; border: 1px solid #c4b5fd;
+  border-radius: 20px; padding: 2px 8px; font-weight: 600; }
+.mini-counts { margin-left: auto; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.mc { font-size: 11px; padding: 1px 7px; border-radius: 4px; font-weight: 600; }
+.mc-v { background:#fee2e2; color:#991b1b; }
+.mc-s { background:#fff7ed; color:#c2410c; }
+.mc-p { background:#dcfce7; color:#166534; }
+.mc-k { background:#eff6ff; color:#1e40af; }
+.mc-e { background:#f5f3ff; color:#5b21b6; }
+.toggle-arrow { color: #bbb; font-size: 10px; margin-left: 4px; }
+
+/* Frame body */
+.fcard-body { padding: 12px 14px; }
+.det-section { margin-bottom: 10px; }
+.det-section:last-child { margin-bottom: 0; }
+.det-section-title { font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.07em; margin-bottom: 6px; }
+.det-pills { display: flex; flex-wrap: wrap; gap: 5px; }
+.dpill { border-radius: 6px; padding: 3px 10px; font-size: 12px; border: 1px solid; }
+.dpill.violation  { background:#fee2e2; color:#7f1d1d; border-color:#fca5a5; font-weight:600; }
+.dpill.suspicious { background:#fff7ed; color:#7c2d12; border-color:#fdba74; font-weight:600; }
+.dpill.ppe        { background:#dcfce7; color:#14532d; border-color:#86efac; }
+.dpill.person     { background:#eff6ff; color:#1e3a8a; border-color:#93c5fd; }
+.dpill.equipment  { background:#f5f3ff; color:#4c1d95; border-color:#c4b5fd; }
+.dpill.other      { background:#f9fafb; color:#374151; border-color:#d1d5db; }
+.dpill .conf      { font-size: 10px; opacity: 0.55; margin-left: 3px; }
+.dpill .note      { font-size: 10px; color: #888; display: block; margin-top: 2px; }
+
+/* Claude detail box */
+.claude-detail { background: #f5f3ff; border: 1px solid #c4b5fd; border-radius: 8px;
+  padding: 10px 12px; margin-top: 8px; }
+.claude-detail-title { font-size: 10px; font-weight: 700; color: #5b21b6;
+  text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+.claude-person { font-size: 12px; color: #374151; margin-bottom: 4px; padding: 4px 8px;
+  background: #fff; border-radius: 6px; border: 1px solid #e9d5ff; }
+.claude-assessment { font-size: 12px; color: #5b21b6; font-style: italic; margin-top: 6px; }
+
+.no-det { font-size: 12px; color: #aaa; font-style: italic; }
 </style>
 </head>
 <body>
@@ -115,348 +196,471 @@
 
   <!-- Header -->
   <div class="header">
-    <div class="logo">◈</div>
-    <div>
-      <h1>OxBlue Site Analyzer</h1>
-      <p>Local YOLO-powered construction site video intelligence</p>
+    <div class="logo">⛑</div>
+    <div class="header-text">
+      <h1>OxBlue Site Analyzer <span style="font-size:13px;font-weight:400;color:#888">v3</span></h1>
+      <p>3-stage pipeline: YOLO Safety Model → Proximity Check → Claude Vision</p>
     </div>
-    <button id="btn-export" class="btn btn-export" style="display:none" onclick="exportJSON()">Export JSON ↓</button>
+    <button id="btn-export" class="btn btn-dark" style="display:none;margin-left:auto" onclick="exportJSON()">Export JSON ↓</button>
+  </div>
+
+  <!-- Pipeline diagram -->
+  <div class="pipeline">
+    <div class="pipe-step">
+      <div class="ps-num">Stage 1</div>
+      <div class="ps-name">YOLO Safety Model</div>
+      <div class="ps-desc">Hardhat / NO-Hardhat / vest / person</div>
+    </div>
+    <div class="pipe-step">
+      <div class="ps-num">Stage 2</div>
+      <div class="ps-name">Proximity Check</div>
+      <div class="ps-desc">Person with no hardhat nearby → suspicious</div>
+    </div>
+    <div class="pipe-step" id="pipe-claude">
+      <div class="ps-num">Stage 3</div>
+      <div class="ps-name" id="pipe-claude-name">Claude Vision</div>
+      <div class="ps-desc">Beanie vs hard hat vs no hat — only on flagged frames</div>
+    </div>
   </div>
 
   <!-- Settings -->
   <div class="settings">
-    <div class="setting-group">
+    <div class="sg">
       <label>Sample Rate</label>
       <select id="fps">
-        <option value="1" selected>1 fps (default)</option>
-        <option value="2">2 fps</option>
         <option value="0.5">1 frame / 2 sec</option>
-        <option value="0.2">1 frame / 5 sec</option>
+        <option value="1" selected>1 fps — default</option>
+        <option value="2">2 fps — detailed</option>
       </select>
     </div>
-    <div class="setting-group">
-      <label>Confidence Threshold</label>
+    <div class="sg">
+      <label>Confidence</label>
       <select id="confidence">
         <option value="0.25">0.25 — relaxed</option>
         <option value="0.35" selected>0.35 — default</option>
         <option value="0.5">0.50 — strict</option>
-        <option value="0.65">0.65 — very strict</option>
       </select>
     </div>
-    <div class="setting-group">
-      <label>YOLO Model</label>
-      <select id="model" disabled title="Change model in server.py">
-        <option>YOLOv8n (nano) — fastest</option>
-      </select>
+    <div class="sg">
+      <label>Claude Vision (Stage 3)</label>
+      <div class="toggle-row">
+        <label class="toggle-switch">
+          <input type="checkbox" id="use-claude" checked>
+          <span class="toggle-slider"></span>
+        </label>
+        <div class="toggle-label">
+          Enable second pass
+          <span id="claude-toggle-note">Requires ANTHROPIC_API_KEY in server</span>
+        </div>
+      </div>
     </div>
-    <div style="margin-left:auto;font-size:11px;color:#999;align-self:flex-end;padding-bottom:2px;">
-      Backend: <span id="server-status" style="color:#aaa">checking…</span>
+    <div class="status-row">
+      <div class="status-pill"><div class="sdot" id="dot-yolo"></div><span id="st-yolo">YOLO…</span></div>
+      <div class="status-pill"><div class="sdot" id="dot-claude"></div><span id="st-claude">Claude…</span></div>
     </div>
   </div>
 
-  <!-- Upload zone -->
+  <!-- Upload -->
   <div id="drop-zone">
-    <div class="icon">🎬</div>
+    <div style="font-size:38px">🎬</div>
     <h2>Drop a video file here</h2>
-    <p>or click to browse · MP4, MOV, AVI supported</p>
-    <input id="file-input" type="file" accept="video/*" style="display:none"/>
+    <p>or click to browse · MP4, MOV, AVI</p>
+    <input id="fi" type="file" accept="video/*" style="display:none"/>
   </div>
 
   <!-- Video panel -->
   <div id="video-panel">
     <video id="preview" controls></video>
     <div class="video-bar">
-      <span class="video-meta" id="video-meta"></span>
-      <div class="btn-group">
-        <button class="btn" onclick="resetVideo()">Change video</button>
-        <button class="btn btn-primary" id="btn-analyze" onclick="startAnalysis()">Analyze ◈</button>
+      <span class="video-meta" id="vmeta"></span>
+      <div style="display:flex;gap:8px;flex-shrink:0">
+        <button class="btn" onclick="resetVideo()">Change</button>
+        <button class="btn btn-dark" id="btn-analyze" onclick="startAnalysis()">Analyze ◈</button>
       </div>
     </div>
   </div>
 
   <!-- Progress -->
   <div id="progress-wrap">
-    <div class="progress-header">
-      <span class="progress-label">Processing frames with YOLO</span>
-      <span class="progress-count" id="progress-text">0 / 0</span>
+    <div class="prog-row">
+      <span id="prog-label">Running 3-stage detection…</span>
+      <span id="prog-text">0 / 0</span>
     </div>
-    <div class="progress-bar-bg">
-      <div class="progress-bar-fill" id="progress-fill"></div>
-    </div>
+    <div class="pbar"><div class="pbar-fill" id="pbar"></div></div>
   </div>
 
   <!-- Log -->
   <div id="log"></div>
 
-  <!-- Summary -->
-  <div id="summary">
-    <div class="stat-row">
-      <div class="stat-card"><div class="stat-num" id="s-frames" style="color:#1a1a2e">0</div><div class="stat-lbl">Frames</div></div>
-      <div class="stat-card"><div class="stat-num" id="s-objects" style="color:#2c7be5">0</div><div class="stat-lbl">Objects</div></div>
-      <div class="stat-card"><div class="stat-num" id="s-classes" style="color:#7c3fbf">0</div><div class="stat-lbl">Classes</div></div>
-      <div class="stat-card"><div class="stat-num" id="s-relevant" style="color:#27ae60">0</div><div class="stat-lbl">Site-relevant</div></div>
-    </div>
-    <div class="top-objects" id="top-objects"></div>
+  <!-- Banner -->
+  <div id="safety-banner">
+    <div class="banner-title" id="b-title"></div>
+    <div class="banner-sub"   id="b-sub"></div>
   </div>
 
-  <!-- Results list -->
-  <div id="results-header" style="display:none" class="results-header">
+  <!-- Stats -->
+  <div id="summary">
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-num" id="s-frames" style="color:#1a1a2e">0</div>
+        <div class="stat-lbl">Frames</div>
+      </div>
+      <div class="stat-card danger">
+        <div class="stat-num" id="s-violations" style="color:#dc2626">0</div>
+        <div class="stat-lbl">⚠ Confirmed Violations</div>
+      </div>
+      <div class="stat-card warn">
+        <div class="stat-num" id="s-suspicious" style="color:#d97706">0</div>
+        <div class="stat-lbl">? Suspicious (review)</div>
+      </div>
+      <div class="stat-card safe">
+        <div class="stat-num" id="s-ppe" style="color:#16a34a">0</div>
+        <div class="stat-lbl">✓ PPE Compliant</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="s-people" style="color:#2563eb">0</div>
+        <div class="stat-lbl">People</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="s-equip" style="color:#7c3aed">0</div>
+        <div class="stat-lbl">Equipment</div>
+      </div>
+    </div>
+    <div class="legend">
+      <div class="leg"><div class="leg-dot" style="background:#fca5a5"></div>Confirmed violation (NO hard hat)</div>
+      <div class="leg"><div class="leg-dot" style="background:#fdba74"></div>Suspicious — non-hard-hat headwear detected by Claude</div>
+      <div class="leg"><div class="leg-dot" style="background:#86efac"></div>PPE compliant</div>
+      <div class="leg"><div class="leg-dot" style="background:#93c5fd"></div>Person</div>
+      <div class="leg"><div class="leg-dot" style="background:#c4b5fd"></div>Equipment / vehicle</div>
+      <div class="leg"><div class="leg-dot" style="background:#e9d5ff"></div>Claude Vision reviewed</div>
+    </div>
+  </div>
+
+  <!-- Filter -->
+  <div id="filter-bar">
+    <div class="filter-row">
+      <button class="f-btn active" onclick="setFilter(this,'all')">All frames</button>
+      <button class="f-btn" onclick="setFilter(this,'high')">⚠ Violations</button>
+      <button class="f-btn" onclick="setFilter(this,'medium')">? Suspicious</button>
+      <button class="f-btn" onclick="setFilter(this,'detections')">Has detections</button>
+      <button class="f-btn" onclick="setFilter(this,'claude')">Claude reviewed</button>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div class="results-hdr" id="results-hdr" style="display:none">
     <h3>Frame-by-frame detections</h3>
-    <span id="results-count"></span>
+    <span id="results-count" style="font-size:12px;color:#999"></span>
   </div>
   <div id="results"></div>
 
 </div>
-
 <script>
-let videoFile = null;
-let allResults = [];
-let videoMeta = {};
+let videoFile = null, videoMeta = {}, allResults = [], activeFilter = 'all';
 
-// ── Server status check ───────────────────────────────────────────────────────
-async function checkServer() {
+// ── Server status ─────────────────────────────────────────────────────────────
+async function checkStatus() {
   try {
-    const r = await fetch('http://localhost:5000/', {method:'HEAD', signal: AbortSignal.timeout(2000)});
-    document.getElementById('server-status').textContent = '● running';
-    document.getElementById('server-status').style.color = '#27ae60';
+    const r = await fetch('http://localhost:5000/status', { signal: AbortSignal.timeout(2500) });
+    const d = await r.json();
+    setDot('dot-yolo',   d.safety_model,  'st-yolo',   d.safety_model ? 'YOLO safety model' : 'YOLO (COCO only)');
+    setDot('dot-claude', d.claude_enabled,'st-claude',  d.claude_enabled ? 'Claude Vision ready' : 'Claude not configured');
+    if (!d.claude_enabled) {
+      document.getElementById('claude-toggle-note').textContent = 'Set ANTHROPIC_API_KEY in server to enable';
+      document.getElementById('use-claude').disabled = true;
+      document.getElementById('pipe-claude-name').style.color = '#aaa';
+    } else {
+      document.getElementById('claude-toggle-note').textContent = 'Only fires on uncertain frames (cost-efficient)';
+    }
   } catch {
-    document.getElementById('server-status').textContent = '● offline — run server.py';
-    document.getElementById('server-status').style.color = '#c0392b';
+    setDot('dot-yolo',   false, 'st-yolo',  'server offline');
+    setDot('dot-claude', false, 'st-claude', 'server offline');
   }
 }
-checkServer();
+function setDot(dotId, ok, labelId, text) {
+  document.getElementById(dotId).className = 'sdot ' + (ok ? 'on' : (text.includes('offline') ? 'off' : 'na'));
+  document.getElementById(labelId).textContent = text;
+}
+checkStatus();
 
 // ── File handling ─────────────────────────────────────────────────────────────
-const dropZone  = document.getElementById('drop-zone');
-const fileInput = document.getElementById('file-input');
-
-dropZone.addEventListener('click', () => fileInput.click());
-dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag'); });
-dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag'));
-dropZone.addEventListener('drop', e => { e.preventDefault(); dropZone.classList.remove('drag'); loadFile(e.dataTransfer.files[0]); });
-fileInput.addEventListener('change', e => loadFile(e.target.files[0]));
+const dz = document.getElementById('drop-zone');
+const fi = document.getElementById('fi');
+dz.addEventListener('click', ()=>fi.click());
+dz.addEventListener('dragover', e=>{e.preventDefault();dz.classList.add('drag');});
+dz.addEventListener('dragleave', ()=>dz.classList.remove('drag'));
+dz.addEventListener('drop', e=>{e.preventDefault();dz.classList.remove('drag');loadFile(e.dataTransfer.files[0]);});
+fi.addEventListener('change', e=>loadFile(e.target.files[0]));
 
 function loadFile(file) {
   if (!file || !file.type.startsWith('video/')) return;
   videoFile = file;
-  const url = URL.createObjectURL(file);
-  const preview = document.getElementById('preview');
-  preview.src = url;
-  preview.onloadedmetadata = () => {
-    const d = preview.duration;
-    const h = String(Math.floor(d/3600)).padStart(2,'0');
-    const m = String(Math.floor((d%3600)/60)).padStart(2,'0');
-    const s = String(Math.floor(d%60)).padStart(2,'0');
-    document.getElementById('video-meta').textContent =
-      `${file.name} · ${h}:${m}:${s} · ${preview.videoWidth}×${preview.videoHeight}`;
-    videoMeta = { name: file.name, duration: d };
+  const p = document.getElementById('preview');
+  p.src = URL.createObjectURL(file);
+  p.onloadedmetadata = () => {
+    const d=p.duration, hh=String(Math.floor(d/3600)).padStart(2,'0'),
+          mm=String(Math.floor((d%3600)/60)).padStart(2,'0'), ss=String(Math.floor(d%60)).padStart(2,'0');
+    document.getElementById('vmeta').textContent = `${file.name}  ·  ${hh}:${mm}:${ss}  ·  ${p.videoWidth}×${p.videoHeight}`;
+    videoMeta = {name:file.name, duration:d};
   };
-  dropZone.style.display = 'none';
-  document.getElementById('video-panel').style.display = 'block';
-  resetResults();
+  dz.style.display='none';
+  document.getElementById('video-panel').style.display='block';
+  clearResults();
 }
 
 function resetVideo() {
-  videoFile = null;
-  dropZone.style.display = 'block';
-  document.getElementById('video-panel').style.display = 'none';
-  document.getElementById('file-input').value = '';
-  resetResults();
+  videoFile=null; dz.style.display='block';
+  document.getElementById('video-panel').style.display='none';
+  fi.value=''; clearResults();
 }
 
-function resetResults() {
-  allResults = [];
-  document.getElementById('log').innerHTML = '';
-  document.getElementById('log').style.display = 'none';
-  document.getElementById('results').innerHTML = '';
-  document.getElementById('summary').style.display = 'none';
-  document.getElementById('results-header').style.display = 'none';
-  document.getElementById('btn-export').style.display = 'none';
-  document.getElementById('progress-wrap').style.display = 'none';
+function clearResults() {
+  allResults=[];
+  ['log','filter-bar','safety-banner','summary','progress-wrap'].forEach(id=>{
+    const el=document.getElementById(id); el.innerHTML=id==='log'?'':el.innerHTML; el.style.display='none';
+  });
+  document.getElementById('results').innerHTML='';
+  document.getElementById('results-hdr').style.display='none';
+  document.getElementById('btn-export').style.display='none';
+  document.getElementById('pbar').style.width='0%';
 }
 
-// ── Logging ───────────────────────────────────────────────────────────────────
-function log(msg, type='') {
-  const logEl = document.getElementById('log');
-  logEl.style.display = 'block';
-  const line = document.createElement('div');
-  line.className = 'log-line' + (type ? ' ' + type : '');
-  line.textContent = msg;
-  logEl.appendChild(line);
-  logEl.scrollTop = logEl.scrollHeight;
+// ── Log ───────────────────────────────────────────────────────────────────────
+function addLog(msg, cls='') {
+  const el=document.getElementById('log');
+  el.style.display='block';
+  const d=document.createElement('div');
+  d.className='ll'+(cls?' '+cls:'');
+  d.textContent=msg;
+  el.appendChild(d);
+  el.scrollTop=el.scrollHeight;
 }
 
-// ── Analysis ──────────────────────────────────────────────────────────────────
+// ── Analyze ───────────────────────────────────────────────────────────────────
 async function startAnalysis() {
   if (!videoFile) return;
-  const btn = document.getElementById('btn-analyze');
+  const btn=document.getElementById('btn-analyze');
   if (btn.disabled) return;
+  clearResults();
+  btn.disabled=true; btn.textContent='Analyzing…';
 
-  resetResults();
-  btn.disabled = true;
-  btn.textContent = 'Analyzing…';
+  const fd=new FormData();
+  fd.append('video', videoFile);
+  fd.append('fps', document.getElementById('fps').value);
+  fd.append('confidence', document.getElementById('confidence').value);
+  fd.append('use_claude', document.getElementById('use-claude').checked ? 'true' : 'false');
 
-  const fps        = document.getElementById('fps').value;
-  const confidence = document.getElementById('confidence').value;
-  const formData   = new FormData();
-  formData.append('video', videoFile);
-  formData.append('fps', fps);
-  formData.append('confidence', confidence);
-
-  log('Uploading video to local server…');
-
+  addLog('Uploading video…');
   try {
-    const response = await fetch('http://localhost:5000/analyze', { method: 'POST', body: formData });
-    if (!response.ok) { log('Server error: ' + response.status, 'warn'); return; }
-
-    const reader  = response.body.getReader();
-    const decoder = new TextDecoder();
-    let buffer    = '';
-
-    document.getElementById('progress-wrap').style.display = 'block';
-
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      buffer += decoder.decode(value, { stream: true });
-      const lines = buffer.split('\n');
-      buffer = lines.pop();
-      for (const line of lines) {
-        if (!line.startsWith('data: ')) continue;
-        try { handleEvent(JSON.parse(line.slice(6))); } catch {}
+    const res = await fetch('http://localhost:5000/analyze',{method:'POST',body:fd});
+    if (!res.ok) { addLog('Server error: '+res.status,'err'); return; }
+    document.getElementById('progress-wrap').style.display='block';
+    const reader=res.body.getReader(), dec=new TextDecoder();
+    let buf='';
+    while(true) {
+      const {done,value}=await reader.read();
+      if(done) break;
+      buf+=dec.decode(value,{stream:true});
+      const lines=buf.split('\n'); buf=lines.pop();
+      for(const line of lines) {
+        if(!line.startsWith('data: ')) continue;
+        try{handleEvent(JSON.parse(line.slice(6)));}catch{}
       }
     }
-  } catch (e) {
-    log('Connection error — is server.py running? ' + e.message, 'warn');
-  } finally {
-    btn.disabled = false;
-    btn.textContent = 'Analyze ◈';
-  }
+  } catch(e) { addLog('Connection error: '+e.message,'err'); }
+  finally { btn.disabled=false; btn.textContent='Analyze ◈'; }
 }
 
-// ── SSE event handler ─────────────────────────────────────────────────────────
+// ── Event handler ─────────────────────────────────────────────────────────────
 function handleEvent(ev) {
-  if (ev.type === 'meta') {
-    log(`Video: ${ev.duration}s · ${ev.native_fps} fps native · ${ev.frames_to_analyze} frames to analyze at ${ev.sample_fps} fps`);
-    log('Starting YOLO detection…');
+  if (ev.type==='meta') {
+    const models = ev.safety_model_active ? '✓ safety YOLO' : '⚠ COCO only';
+    const claude = ev.claude_active ? ' + ✓ Claude Vision' : '';
+    addLog(`${ev.duration}s · ${ev.frames_to_analyze} frames · ${models}${claude}`,
+           ev.safety_model_active ? 'ok' : 'warn');
 
-  } else if (ev.type === 'frame') {
-    // Progress
-    const pct = Math.round(ev.sampled / ev.total * 100);
-    document.getElementById('progress-fill').style.width = pct + '%';
-    document.getElementById('progress-text').textContent = `${ev.sampled} / ${ev.total} · ${pct}%`;
+  } else if (ev.type==='frame') {
+    const pct=Math.round(ev.sampled/ev.total*100);
+    document.getElementById('pbar').style.width=pct+'%';
+    document.getElementById('prog-text').textContent=`${ev.sampled}/${ev.total} · ${pct}%`;
 
-    // Log
-    const names = ev.detections.map(d => d.class);
-    const unique = [...new Set(names)];
-    if (unique.length > 0) {
-      log(`[${ev.timestamp}] ✓ ${unique.join(', ')}`, 'ok');
-    } else {
-      log(`[${ev.timestamp}] — nothing detected`);
+    const vn=ev.violations?.length||0, sn=ev.suspicious?.length||0;
+    const claudeMark = ev.claude_used ? ' [Claude ✓]' : '';
+    if (vn) addLog(`[${ev.timestamp}] ⚠ ${vn} VIOLATION${vn>1?'S':''}${claudeMark}`,'warn');
+    else if (sn) addLog(`[${ev.timestamp}] ? ${sn} suspicious${claudeMark}`,'warn');
+    else if (ev.count) addLog(`[${ev.timestamp}] ✓ ${ev.count} objects${claudeMark}`,'ok');
+    else addLog(`[${ev.timestamp}] — nothing`);
+
+    if (ev.claude_used && ev.claude_result?.frame_assessment) {
+      addLog(`  ↳ Claude: "${ev.claude_result.frame_assessment}"`, 'claude');
     }
 
-    // Store & render card
     allResults.push(ev);
     renderCard(ev);
     updateSummary();
 
-  } else if (ev.type === 'done') {
-    log(`✓ Complete — ${ev.frames_analyzed} frames analyzed`, 'ok');
-    document.getElementById('btn-export').style.display = 'block';
-    renderTopObjects(ev.object_tally);
-  } else if (ev.type === 'error') {
-    log('Error: ' + ev.message, 'warn');
+  } else if (ev.type==='done') {
+    addLog(`✓ Done — ${ev.frames_analyzed} frames, ${ev.total_violations} violations`, 'ok');
+    document.getElementById('btn-export').style.display='block';
+    document.getElementById('filter-bar').style.display='block';
+    renderBanner(ev);
+  } else if (ev.type==='error') {
+    addLog('Error: '+ev.message,'err');
   }
 }
 
-// ── Render a frame card ───────────────────────────────────────────────────────
+// ── Banner ────────────────────────────────────────────────────────────────────
+function renderBanner(ev) {
+  const b=document.getElementById('safety-banner');
+  b.style.display='block';
+  const total_suspicious = allResults.reduce((a,r)=>a+(r.suspicious?.length||0),0);
+  if (ev.total_violations>0) {
+    Object.assign(b.style,{background:'#fef2f2',borderColor:'#ef4444'});
+    document.getElementById('b-title').style.color='#991b1b';
+    document.getElementById('b-title').textContent=`⚠ ${ev.total_violations} confirmed safety violation${ev.total_violations>1?'s':''} across ${ev.violation_frames} frame${ev.violation_frames>1?'s':''}`;
+    document.getElementById('b-sub').textContent='Workers detected wearing beanies, baseball caps, or no head protection instead of hard hats. Review flagged frames below.';
+  } else if (total_suspicious>0) {
+    Object.assign(b.style,{background:'#fffbeb',borderColor:'#f59e0b'});
+    document.getElementById('b-title').style.color='#92400e';
+    document.getElementById('b-title').textContent=`? ${total_suspicious} suspicious headwear detection${total_suspicious>1?'s':''} — manual review recommended`;
+    document.getElementById('b-sub').textContent='Claude Vision was not available to confirm. Enable ANTHROPIC_API_KEY for definitive hard hat vs beanie classification.';
+  } else {
+    Object.assign(b.style,{background:'#f0fdf4',borderColor:'#22c55e'});
+    document.getElementById('b-title').style.color='#166534';
+    document.getElementById('b-title').textContent='✓ No safety violations detected';
+    document.getElementById('b-sub').textContent='All visible workers appear compliant with PPE requirements.';
+  }
+}
+
+// ── Summary ───────────────────────────────────────────────────────────────────
+function updateSummary() {
+  document.getElementById('summary').style.display='block';
+  document.getElementById('results-hdr').style.display='flex';
+  document.getElementById('s-frames').textContent     = allResults.length;
+  document.getElementById('s-violations').textContent = allResults.reduce((a,r)=>a+(r.violations?.length||0),0);
+  document.getElementById('s-suspicious').textContent = allResults.reduce((a,r)=>a+(r.suspicious?.length||0),0);
+  document.getElementById('s-ppe').textContent        = allResults.reduce((a,r)=>a+(r.ppe_compliant?.length||0),0);
+  document.getElementById('s-people').textContent     = allResults.reduce((a,r)=>a+(r.people?.length||0),0);
+  document.getElementById('s-equip').textContent      = allResults.reduce((a,r)=>a+(r.equipment?.length||0),0);
+  document.getElementById('results-count').textContent = allResults.length+' frames';
+}
+
+// ── Render frame card ─────────────────────────────────────────────────────────
 function renderCard(ev) {
-  const resultsEl = document.getElementById('results');
-  const header    = document.getElementById('results-header');
-  header.style.display = 'flex';
-  document.getElementById('results-count').textContent = allResults.length + ' frames';
+  const risk=ev.risk||'none';
+  const card=document.createElement('div');
+  card.className=`frame-card risk-${risk}`;
+  card.dataset.risk=risk;
+  card.dataset.hasdet=ev.count>0?'1':'0';
+  card.dataset.claude=ev.claude_used?'1':'0';
 
-  const hasDetections = ev.detections.length > 0;
-  const card = document.createElement('div');
-  card.className = 'frame-card';
+  const vn=ev.violations?.length||0, sn=ev.suspicious?.length||0,
+        pn=ev.ppe_compliant?.length||0, kn=ev.people?.length||0, en=ev.equipment?.length||0;
 
-  const head = document.createElement('div');
-  head.className = 'frame-head';
-  head.innerHTML = `
-    <span class="ts-badge">${ev.timestamp}</span>
-    <span class="obj-count">${ev.count} object${ev.count !== 1 ? 's' : ''}</span>
+  const head=document.createElement('div');
+  head.className=`fcard-head risk-${risk}`;
+  head.innerHTML=`
+    <span class="ts">${ev.timestamp}</span>
+    <span class="risk-chip ${risk}">${risk==='high'?'⚠ violation':risk==='medium'?'? suspicious':risk==='low'?'✓ low':'— none'}</span>
+    ${ev.claude_used?'<span class="claude-badge">Claude ✓</span>':''}
+    <div class="mini-counts">
+      ${vn?`<span class="mc mc-v">⚠ ${vn} violation${vn>1?'s':''}</span>`:''}
+      ${sn?`<span class="mc mc-s">? ${sn} suspicious</span>`:''}
+      ${pn?`<span class="mc mc-p">✓ ${pn} PPE</span>`:''}
+      ${kn?`<span class="mc mc-k">${kn} person${kn>1?'s':''}</span>`:''}
+      ${en?`<span class="mc mc-e">${en} equip</span>`:''}
+    </div>
     <span class="toggle-arrow">▲</span>
   `;
 
-  const body = document.createElement('div');
-  body.className = 'frame-body';
+  const body=document.createElement('div');
+  body.className='fcard-body';
 
-  if (hasDetections) {
-    const list = document.createElement('div');
-    list.className = 'detections-list';
-    ev.detections.forEach(d => {
-      const pill = document.createElement('span');
-      pill.className = 'det-pill' + (d.construction_relevant ? ' relevant' : '');
-      pill.textContent = `${d.class} ${Math.round(d.confidence * 100)}%`;
-      list.appendChild(pill);
-    });
-    body.appendChild(list);
+  if (ev.count===0) {
+    body.innerHTML='<span class="no-det">No objects detected</span>';
   } else {
-    body.innerHTML = '<span class="empty-frame">No objects detected</span>';
+    const sections=[
+      {key:'violations',    label:'⚠ Safety Violations',     color:'#dc2626', cat:'violation'},
+      {key:'suspicious',    label:'? Suspicious Headwear',    color:'#d97706', cat:'suspicious'},
+      {key:'ppe_compliant', label:'✓ PPE Compliant',          color:'#16a34a', cat:'ppe'},
+      {key:'people',        label:'👤 People',                color:'#2563eb', cat:'person'},
+      {key:'equipment',     label:'🚛 Equipment / Vehicles',  color:'#7c3aed', cat:'equipment'},
+      {key:'other',         label:'📦 Other',                 color:'#6b7280', cat:'other'},
+    ];
+    sections.forEach(({key,label,color,cat})=>{
+      const items=ev[key]; if(!items||!items.length) return;
+      const sec=document.createElement('div'); sec.className='det-section';
+      sec.innerHTML=`<div class="det-section-title" style="color:${color}">${label}</div>
+        <div class="det-pills">${items.map(d=>`
+          <span class="dpill ${cat}">
+            ${d.class}${d.confidence!=null?`<span class="conf">${Math.round(d.confidence*100)}%</span>`:''}
+            ${d.note?`<span class="note">${d.note}</span>`:''}
+          </span>`).join('')}
+        </div>`;
+      body.appendChild(sec);
+    });
+
+    // Claude detail box
+    if (ev.claude_used && ev.claude_result) {
+      const cd=document.createElement('div'); cd.className='claude-detail';
+      const people=ev.claude_result.people||[];
+      cd.innerHTML=`<div class="claude-detail-title">Claude Vision Assessment</div>
+        ${people.map((p,i)=>`
+          <div class="claude-person">
+            Person ${i+1}:
+            <strong>${p.head_protection}</strong>
+            ${p.is_compliant?'<span style="color:#16a34a">✓ compliant</span>':'<span style="color:#dc2626">✗ violation</span>'}
+            · vest: ${p.safety_vest}
+            ${p.notes?`<span style="color:#888"> — ${p.notes}</span>`:''}
+          </div>`).join('')}
+        ${ev.claude_result.frame_assessment
+          ?`<div class="claude-assessment">"${ev.claude_result.frame_assessment}"</div>`:''}`;
+      body.appendChild(cd);
+    }
   }
 
-  // Toggle
-  let open = true;
-  head.addEventListener('click', () => {
-    open = !open;
-    body.style.display = open ? 'block' : 'none';
-    head.querySelector('.toggle-arrow').textContent = open ? '▲' : '▼';
-    head.classList.toggle('collapsed', !open);
+  let open=true;
+  head.addEventListener('click',()=>{
+    open=!open;
+    body.style.display=open?'block':'none';
+    head.classList.toggle('collapsed',!open);
+    head.querySelector('.toggle-arrow').textContent=open?'▲':'▼';
   });
 
-  card.appendChild(head);
-  card.appendChild(body);
-  resultsEl.appendChild(card);
-  card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  card.appendChild(head); card.appendChild(body);
+  document.getElementById('results').appendChild(card);
+  applyFilter();
 }
 
-// ── Update summary stats ──────────────────────────────────────────────────────
-function updateSummary() {
-  const summary = document.getElementById('summary');
-  summary.style.display = 'block';
-  const totalObj = allResults.reduce((a, r) => a + r.count, 0);
-  const classSet = new Set(allResults.flatMap(r => r.detections.map(d => d.class)));
-  const relevant = allResults.reduce((a, r) => a + r.detections.filter(d => d.construction_relevant).length, 0);
-  document.getElementById('s-frames').textContent  = allResults.length;
-  document.getElementById('s-objects').textContent = totalObj;
-  document.getElementById('s-classes').textContent = classSet.size;
-  document.getElementById('s-relevant').textContent = relevant;
+// ── Filter ────────────────────────────────────────────────────────────────────
+function setFilter(btn,f) {
+  activeFilter=f;
+  document.querySelectorAll('.f-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilter();
 }
-
-function renderTopObjects(tally) {
-  const top = Object.entries(tally).sort((a, b) => b[1] - a[1]).slice(0, 6);
-  const el  = document.getElementById('top-objects');
-  el.innerHTML = '<span class="top-label">Top detected:</span>';
-  top.forEach(([cls, count]) => {
-    const pill = document.createElement('span');
-    pill.className = 'obj-pill';
-    pill.textContent = `${cls} (${count})`;
-    el.appendChild(pill);
+function applyFilter() {
+  document.querySelectorAll('.frame-card').forEach(card=>{
+    const r=card.dataset.risk, h=card.dataset.hasdet==='1', c=card.dataset.claude==='1';
+    let show=false;
+    if (activeFilter==='all') show=true;
+    else if (activeFilter==='high') show=r==='high';
+    else if (activeFilter==='medium') show=r==='medium';
+    else if (activeFilter==='detections') show=h;
+    else if (activeFilter==='claude') show=c;
+    card.style.display=show?'block':'none';
   });
 }
 
 // ── Export ────────────────────────────────────────────────────────────────────
 function exportJSON() {
-  const report = {
-    video: videoMeta.name,
-    generated: new Date().toISOString(),
-    frames_analyzed: allResults.length,
-    frames: allResults
-  };
-  const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `oxblue_${Date.now()}.json`;
+  const blob=new Blob([JSON.stringify({
+    video:videoMeta.name, generated:new Date().toISOString(),
+    frames_analyzed:allResults.length, frames:allResults
+  },null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=`oxblue_safety_v3_${Date.now()}.json`;
   a.click();
 }
 </script>
