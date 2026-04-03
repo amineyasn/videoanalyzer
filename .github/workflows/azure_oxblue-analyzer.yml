@@ -1,5 +1,5 @@
 name: Deploy OxBlue Analyzer to Azure Web App
-
+ 
 on:
   push:
     branches:
