@@ -1,5 +1,6 @@
 flask
 flask-cors
 ultralytics
-opencv-python
+opencv-python-headless
 anthropic
+gunicorn

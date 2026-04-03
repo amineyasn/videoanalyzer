@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -197,7 +196,7 @@ input:checked+.tsl:before{transform:translateX(16px);}
 
   <!-- Header -->
   <div class="header">
-    <img   src="oxblue-logo-ai.png" alt="OxBlue" style="height:52px;width:auto;object-fit:contain;flex-shrink:0;border-radius:8px;">
+    <img src="oxblue-logo.png" alt="OxBlue" style="height:52px;width:auto;object-fit:contain;flex-shrink:0;border-radius:8px;">
     <div class="header-text">
       <h1>Site Analyzer <span style="font-size:13px;font-weight:400;color:#888">v4</span></h1>
       <p>Safety monitoring · Hard hat detection · Steel & material delivery tracking</p>
@@ -345,13 +344,18 @@ input:checked+.tsl:before{transform:translateX(16px);}
 
 </div><!-- /wrap -->
 <script>
+// Auto-detect API base: empty string = same origin (Azure), localhost for local dev
+const API = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://localhost:5000'
+  : '';
+
 let videoFile=null, videoMeta={}, allResults=[], allDeliveryEvents=[];
 let activeFilter='all', activeFrameFilter='all';
 
 // ── Server status ─────────────────────────────────────────────────────────────
 async function checkStatus() {
   try {
-    const r=await fetch('http://localhost:5000/status',{signal:AbortSignal.timeout(2500)});
+    const r=await fetch(`${API}/status`,{signal:AbortSignal.timeout(2500)});
     const d=await r.json();
     setDot('dot-yolo',d.safety_model,'st-yolo',d.safety_model?'YOLO safety model':'YOLO (COCO only)');
     setDot('dot-claude',d.claude_enabled,'st-claude',d.claude_enabled?'Claude Vision ready':'Claude — set API key');
@@ -460,7 +464,7 @@ async function startAnalysis(){
   fd.append('use_claude',document.getElementById('use-claude').checked?'true':'false');
   addLog('Uploading video…');
   try {
-    const res=await fetch('http://localhost:5000/analyze',{method:'POST',body:fd});
+    const res=await fetch(`${API}/analyze`,{method:'POST',body:fd});
     if(!res.ok){addLog('Server error: '+res.status,'err');return;}
     document.getElementById('progress-wrap').style.display='block';
     document.getElementById('tabs').style.display='flex';

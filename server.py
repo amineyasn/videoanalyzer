@@ -38,7 +38,7 @@ from flask import Flask, request, Response, jsonify, send_from_directory
 from flask_cors import CORS
 from ultralytics import YOLO
 
-app = Flask(__name__, static_folder=".")
+app = Flask(__name__, static_folder=str(Path(__file__).parent))
 CORS(app)
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -49,7 +49,10 @@ SAFETY_MODEL_URL  = (
     "https://huggingface.co/keremberke/yolov8n-hard-hat-detection"
     "/resolve/main/best.pt"
 )
-SAFETY_MODEL_PATH = Path("hard_hat_yolov8n.pt")
+# On Azure Web App, use a persistent path within the app directory
+# Models are bundled in the deployment zip (see README)
+BASE_DIR          = Path(__file__).parent
+SAFETY_MODEL_PATH = BASE_DIR / "hard_hat_yolov8n.pt"
 
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
 claude_client     = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY) if ANTHROPIC_API_KEY else None
@@ -640,13 +643,19 @@ def analyze_video(video_path: str, sample_fps=1.0, confidence=0.35, use_claude=T
 
 @app.route("/")
 def index():
-    return send_from_directory(".", "index.html")
+    return send_from_directory(str(Path(__file__).parent), "index.html")
 
 
 @app.route("/<path:filename>")
 def static_files(filename):
-    """Serve any file from the current directory (logo, css, etc.)"""
-    return send_from_directory(".", filename)
+    """Serve any static file — logo, etc. Block path traversal."""
+    safe_root = Path(__file__).parent.resolve()
+    target    = (safe_root / filename).resolve()
+    if not str(target).startswith(str(safe_root)):
+        return "Forbidden", 403
+    if filename in ("analyze", "status"):
+        return "Not found", 404
+    return send_from_directory(str(safe_root), filename)
 
 
 @app.route("/status")
@@ -688,6 +697,8 @@ def analyze():
 if __name__ == "__main__":
     print("\n" + "="*60)
     print("  OxBlue Site Analyzer v4 — Safety + Delivery Detection")
-    print("  Open http://localhost:5000")
+    print("  Local: http://localhost:5000")
     print("="*60 + "\n")
     app.run(host="0.0.0.0", port=5000, debug=False, threaded=True)
+
+# Azure Web App / gunicorn entry point — module-level app object is used automatically
