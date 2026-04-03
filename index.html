@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>OxBlue Site Analyzer</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f6f7f9; min-height: 100vh; }
+
+  .wrap { max-width: 880px; margin: 0 auto; padding: 28px 18px 60px; }
+
+  /* Header */
+  .header { display: flex; align-items: center; gap: 12px; margin-bottom: 26px; }
+  .logo { width: 40px; height: 40px; border-radius: 10px; background: #1a1a2e;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 18px; }
+  .header h1 { font-size: 20px; font-weight: 700; color: #1a1a2e; letter-spacing: -0.02em; }
+  .header p  { font-size: 12px; color: #999; margin-top: 1px; }
+
+  /* Settings bar */
+  .settings { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px;
+    padding: 14px 16px; margin-bottom: 18px; display: flex; gap: 20px; flex-wrap: wrap; align-items: center; }
+  .setting-group { display: flex; flex-direction: column; gap: 5px; }
+  .setting-group label { font-size: 11px; font-weight: 600; color: #666; text-transform: uppercase; letter-spacing: 0.05em; }
+  .setting-group select, .setting-group input[type=number] {
+    border: 1px solid #e5e7eb; border-radius: 7px; padding: 6px 10px;
+    font-size: 13px; background: #fafafa; outline: none; color: #1a1a2e; }
+
+  /* Upload zone */
+  #drop-zone { border: 2px dashed #d1d5db; border-radius: 16px; padding: 56px 24px;
+    text-align: center; cursor: pointer; background: #fafafa; transition: all 0.15s; }
+  #drop-zone.drag { border-color: #e2b96f; background: #fffbf0; }
+  #drop-zone .icon { font-size: 38px; margin-bottom: 12px; }
+  #drop-zone h2 { font-size: 16px; font-weight: 600; color: #1a1a2e; margin-bottom: 6px; }
+  #drop-zone p  { font-size: 13px; color: #888; }
+
+  /* Video panel */
+  #video-panel { border: 1px solid #e5e7eb; border-radius: 14px; overflow: hidden; margin-bottom: 16px; display: none; }
+  #preview { width: 100%; display: block; background: #000; max-height: 360px; }
+  .video-bar { padding: 10px 14px; background: #fafafa; border-top: 1px solid #e5e7eb;
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .video-meta { font-size: 11px; color: #888; font-family: monospace; flex: 1;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .btn-group { display: flex; gap: 8px; flex-shrink: 0; }
+  .btn { border: 1px solid #e5e7eb; border-radius: 8px; padding: 7px 14px;
+    font-size: 13px; cursor: pointer; transition: all 0.15s; background: transparent; color: #555; }
+  .btn:hover { background: #f5f5f5; }
+  .btn-primary { background: #1a1a2e; color: #e2b96f; border-color: #1a1a2e; font-weight: 700; }
+  .btn-primary:hover { background: #2a2a4e; }
+  .btn-primary:disabled { background: #888; border-color: #888; cursor: not-allowed; }
+  .btn-export { background: #1a1a2e; color: #e2b96f; border-color: #1a1a2e; font-weight: 700; margin-left: auto; }
+
+  /* Progress */
+  #progress-wrap { margin-bottom: 14px; display: none; }
+  .progress-header { display: flex; justify-content: space-between; margin-bottom: 6px; }
+  .progress-label { font-size: 12px; color: #666; }
+  .progress-count { font-size: 12px; font-family: monospace; font-weight: 600; color: #1a1a2e; }
+  .progress-bar-bg { height: 6px; background: #eee; border-radius: 3px; overflow: hidden; }
+  .progress-bar-fill { height: 100%; background: linear-gradient(90deg, #1a1a2e, #e2b96f);
+    border-radius: 3px; transition: width 0.3s; width: 0%; }
+
+  /* Log */
+  #log { background: #0d0d1a; border-radius: 10px; padding: 12px 14px; margin-bottom: 18px;
+    max-height: 150px; overflow-y: auto; display: none; }
+  .log-line { font-size: 11px; font-family: monospace; line-height: 1.7; color: #778; }
+  .log-line.ok  { color: #4caf50; }
+  .log-line.warn { color: #f0a500; }
+
+  /* Summary cards */
+  #summary { display: none; margin-bottom: 18px; }
+  .stat-row { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+  .stat-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px;
+    padding: 12px 14px; text-align: center; flex: 1; min-width: 80px; }
+  .stat-num  { font-size: 22px; font-weight: 700; }
+  .stat-lbl  { font-size: 10px; color: #888; margin-top: 2px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .top-objects { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  .top-label { font-size: 11px; color: #888; }
+  .obj-pill { background: #1a1a2e; color: #e2b96f; border-radius: 6px; padding: 3px 9px; font-size: 11px; font-weight: 600; }
+
+  /* Results header */
+  .results-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .results-header h3 { font-size: 14px; font-weight: 600; color: #1a1a2e; }
+  .results-header span { font-size: 12px; color: #999; }
+
+  /* Detection cards */
+  .frame-card { border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden;
+    background: #fff; margin-bottom: 8px; transition: box-shadow 0.2s; }
+  .frame-card.high-risk { box-shadow: 0 0 0 2px #f4a7a7; }
+  .frame-head { display: flex; align-items: center; gap: 8px; padding: 9px 14px;
+    cursor: pointer; background: #fafafa; border-bottom: 1px solid #e5e7eb; user-select: none; }
+  .frame-head.high-risk { background: #fff8f8; }
+  .frame-head.collapsed { border-bottom: none; }
+  .ts-badge { font-family: monospace; font-size: 12px; background: #1a1a2e; color: #e2b96f;
+    padding: 2px 8px; border-radius: 5px; flex-shrink: 0; }
+  .risk-badge { border-radius: 20px; padding: 2px 10px; font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.05em; white-space: nowrap; border: 1px solid; }
+  .risk-low    { background: #e6f4ea; color: #1a6130; border-color: #9dcfaa; }
+  .risk-medium { background: #fff8e1; color: #7a4f00; border-color: #ffd54f; }
+  .risk-high   { background: #fdecea; color: #8b1a1a; border-color: #f4a7a7; }
+  .obj-count { margin-left: auto; font-size: 11px; color: #999; }
+  .toggle-arrow { color: #bbb; font-size: 10px; }
+  .frame-body { padding: 12px 14px; }
+  .detections-list { display: flex; flex-wrap: wrap; gap: 5px; }
+  .det-pill { background: #f0f4ff; color: #2c3e8c; border: 1px solid #c5d0f5;
+    border-radius: 6px; padding: 3px 10px; font-size: 12px; }
+  .det-pill.relevant { background: #fff8e0; color: #7a4f00; border-color: #ffd54f; }
+  .empty-frame { font-size: 12px; color: #aaa; font-style: italic; }
+
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="logo">◈</div>
+    <div>
+      <h1>OxBlue Site Analyzer</h1>
+      <p>Local YOLO-powered construction site video intelligence</p>
+    </div>
+    <button id="btn-export" class="btn btn-export" style="display:none" onclick="exportJSON()">Export JSON ↓</button>
+  </div>
+
+  <!-- Settings -->
+  <div class="settings">
+    <div class="setting-group">
+      <label>Sample Rate</label>
+      <select id="fps">
+        <option value="1" selected>1 fps (default)</option>
+        <option value="2">2 fps</option>
+        <option value="0.5">1 frame / 2 sec</option>
+        <option value="0.2">1 frame / 5 sec</option>
+      </select>
+    </div>
+    <div class="setting-group">
+      <label>Confidence Threshold</label>
+      <select id="confidence">
+        <option value="0.25">0.25 — relaxed</option>
+        <option value="0.35" selected>0.35 — default</option>
+        <option value="0.5">0.50 — strict</option>
+        <option value="0.65">0.65 — very strict</option>
+      </select>
+    </div>
+    <div class="setting-group">
+      <label>YOLO Model</label>
+      <select id="model" disabled title="Change model in server.py">
+        <option>YOLOv8n (nano) — fastest</option>
+      </select>
+    </div>
+    <div style="margin-left:auto;font-size:11px;color:#999;align-self:flex-end;padding-bottom:2px;">
+      Backend: <span id="server-status" style="color:#aaa">checking…</span>
+    </div>
+  </div>
+
+  <!-- Upload zone -->
+  <div id="drop-zone">
+    <div class="icon">🎬</div>
+    <h2>Drop a video file here</h2>
+    <p>or click to browse · MP4, MOV, AVI supported</p>
+    <input id="file-input" type="file" accept="video/*" style="display:none"/>
+  </div>
+
+  <!-- Video panel -->
+  <div id="video-panel">
+    <video id="preview" controls></video>
+    <div class="video-bar">
+      <span class="video-meta" id="video-meta"></span>
+      <div class="btn-group">
+        <button class="btn" onclick="resetVideo()">Change video</button>
+        <button class="btn btn-primary" id="btn-analyze" onclick="startAnalysis()">Analyze ◈</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Progress -->
+  <div id="progress-wrap">
+    <div class="progress-header">
+      <span class="progress-label">Processing frames with YOLO</span>
+      <span class="progress-count" id="progress-text">0 / 0</span>
+    </div>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progress-fill"></div>
+    </div>
+  </div>
+
+  <!-- Log -->
+  <div id="log"></div>
+
+  <!-- Summary -->
+  <div id="summary">
+    <div class="stat-row">
+      <div class="stat-card"><div class="stat-num" id="s-frames" style="color:#1a1a2e">0</div><div class="stat-lbl">Frames</div></div>
+      <div class="stat-card"><div class="stat-num" id="s-objects" style="color:#2c7be5">0</div><div class="stat-lbl">Objects</div></div>
+      <div class="stat-card"><div class="stat-num" id="s-classes" style="color:#7c3fbf">0</div><div class="stat-lbl">Classes</div></div>
+      <div class="stat-card"><div class="stat-num" id="s-relevant" style="color:#27ae60">0</div><div class="stat-lbl">Site-relevant</div></div>
+    </div>
+    <div class="top-objects" id="top-objects"></div>
+  </div>
+
+  <!-- Results list -->
+  <div id="results-header" style="display:none" class="results-header">
+    <h3>Frame-by-frame detections</h3>
+    <span id="results-count"></span>
+  </div>
+  <div id="results"></div>
+
+</div>
+
+<script>
+let videoFile = null;
+let allResults = [];
+let videoMeta = {};
+
+// ── Server status check ───────────────────────────────────────────────────────
+async function checkServer() {
+  try {
+    const r = await fetch('http://localhost:5000/', {method:'HEAD', signal: AbortSignal.timeout(2000)});
+    document.getElementById('server-status').textContent = '● running';
+    document.getElementById('server-status').style.color = '#27ae60';
+  } catch {
+    document.getElementById('server-status').textContent = '● offline — run server.py';
+    document.getElementById('server-status').style.color = '#c0392b';
+  }
+}
+checkServer();
+
+// ── File handling ─────────────────────────────────────────────────────────────
+const dropZone  = document.getElementById('drop-zone');
+const fileInput = document.getElementById('file-input');
+
+dropZone.addEventListener('click', () => fileInput.click());
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag'));
+dropZone.addEventListener('drop', e => { e.preventDefault(); dropZone.classList.remove('drag'); loadFile(e.dataTransfer.files[0]); });
+fileInput.addEventListener('change', e => loadFile(e.target.files[0]));
+
+function loadFile(file) {
+  if (!file || !file.type.startsWith('video/')) return;
+  videoFile = file;
+  const url = URL.createObjectURL(file);
+  const preview = document.getElementById('preview');
+  preview.src = url;
+  preview.onloadedmetadata = () => {
+    const d = preview.duration;
+    const h = String(Math.floor(d/3600)).padStart(2,'0');
+    const m = String(Math.floor((d%3600)/60)).padStart(2,'0');
+    const s = String(Math.floor(d%60)).padStart(2,'0');
+    document.getElementById('video-meta').textContent =
+      `${file.name} · ${h}:${m}:${s} · ${preview.videoWidth}×${preview.videoHeight}`;
+    videoMeta = { name: file.name, duration: d };
+  };
+  dropZone.style.display = 'none';
+  document.getElementById('video-panel').style.display = 'block';
+  resetResults();
+}
+
+function resetVideo() {
+  videoFile = null;
+  dropZone.style.display = 'block';
+  document.getElementById('video-panel').style.display = 'none';
+  document.getElementById('file-input').value = '';
+  resetResults();
+}
+
+function resetResults() {
+  allResults = [];
+  document.getElementById('log').innerHTML = '';
+  document.getElementById('log').style.display = 'none';
+  document.getElementById('results').innerHTML = '';
+  document.getElementById('summary').style.display = 'none';
+  document.getElementById('results-header').style.display = 'none';
+  document.getElementById('btn-export').style.display = 'none';
+  document.getElementById('progress-wrap').style.display = 'none';
+}
+
+// ── Logging ───────────────────────────────────────────────────────────────────
+function log(msg, type='') {
+  const logEl = document.getElementById('log');
+  logEl.style.display = 'block';
+  const line = document.createElement('div');
+  line.className = 'log-line' + (type ? ' ' + type : '');
+  line.textContent = msg;
+  logEl.appendChild(line);
+  logEl.scrollTop = logEl.scrollHeight;
+}
+
+// ── Analysis ──────────────────────────────────────────────────────────────────
+async function startAnalysis() {
+  if (!videoFile) return;
+  const btn = document.getElementById('btn-analyze');
+  if (btn.disabled) return;
+
+  resetResults();
+  btn.disabled = true;
+  btn.textContent = 'Analyzing…';
+
+  const fps        = document.getElementById('fps').value;
+  const confidence = document.getElementById('confidence').value;
+  const formData   = new FormData();
+  formData.append('video', videoFile);
+  formData.append('fps', fps);
+  formData.append('confidence', confidence);
+
+  log('Uploading video to local server…');
+
+  try {
+    const response = await fetch('http://localhost:5000/analyze', { method: 'POST', body: formData });
+    if (!response.ok) { log('Server error: ' + response.status, 'warn'); return; }
+
+    const reader  = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer    = '';
+
+    document.getElementById('progress-wrap').style.display = 'block';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop();
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        try { handleEvent(JSON.parse(line.slice(6))); } catch {}
+      }
+    }
+  } catch (e) {
+    log('Connection error — is server.py running? ' + e.message, 'warn');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Analyze ◈';
+  }
+}
+
+// ── SSE event handler ─────────────────────────────────────────────────────────
+function handleEvent(ev) {
+  if (ev.type === 'meta') {
+    log(`Video: ${ev.duration}s · ${ev.native_fps} fps native · ${ev.frames_to_analyze} frames to analyze at ${ev.sample_fps} fps`);
+    log('Starting YOLO detection…');
+
+  } else if (ev.type === 'frame') {
+    // Progress
+    const pct = Math.round(ev.sampled / ev.total * 100);
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('progress-text').textContent = `${ev.sampled} / ${ev.total} · ${pct}%`;
+
+    // Log
+    const names = ev.detections.map(d => d.class);
+    const unique = [...new Set(names)];
+    if (unique.length > 0) {
+      log(`[${ev.timestamp}] ✓ ${unique.join(', ')}`, 'ok');
+    } else {
+      log(`[${ev.timestamp}] — nothing detected`);
+    }
+
+    // Store & render card
+    allResults.push(ev);
+    renderCard(ev);
+    updateSummary();
+
+  } else if (ev.type === 'done') {
+    log(`✓ Complete — ${ev.frames_analyzed} frames analyzed`, 'ok');
+    document.getElementById('btn-export').style.display = 'block';
+    renderTopObjects(ev.object_tally);
+  } else if (ev.type === 'error') {
+    log('Error: ' + ev.message, 'warn');
+  }
+}
+
+// ── Render a frame card ───────────────────────────────────────────────────────
+function renderCard(ev) {
+  const resultsEl = document.getElementById('results');
+  const header    = document.getElementById('results-header');
+  header.style.display = 'flex';
+  document.getElementById('results-count').textContent = allResults.length + ' frames';
+
+  const hasDetections = ev.detections.length > 0;
+  const card = document.createElement('div');
+  card.className = 'frame-card';
+
+  const head = document.createElement('div');
+  head.className = 'frame-head';
+  head.innerHTML = `
+    <span class="ts-badge">${ev.timestamp}</span>
+    <span class="obj-count">${ev.count} object${ev.count !== 1 ? 's' : ''}</span>
+    <span class="toggle-arrow">▲</span>
+  `;
+
+  const body = document.createElement('div');
+  body.className = 'frame-body';
+
+  if (hasDetections) {
+    const list = document.createElement('div');
+    list.className = 'detections-list';
+    ev.detections.forEach(d => {
+      const pill = document.createElement('span');
+      pill.className = 'det-pill' + (d.construction_relevant ? ' relevant' : '');
+      pill.textContent = `${d.class} ${Math.round(d.confidence * 100)}%`;
+      list.appendChild(pill);
+    });
+    body.appendChild(list);
+  } else {
+    body.innerHTML = '<span class="empty-frame">No objects detected</span>';
+  }
+
+  // Toggle
+  let open = true;
+  head.addEventListener('click', () => {
+    open = !open;
+    body.style.display = open ? 'block' : 'none';
+    head.querySelector('.toggle-arrow').textContent = open ? '▲' : '▼';
+    head.classList.toggle('collapsed', !open);
+  });
+
+  card.appendChild(head);
+  card.appendChild(body);
+  resultsEl.appendChild(card);
+  card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// ── Update summary stats ──────────────────────────────────────────────────────
+function updateSummary() {
+  const summary = document.getElementById('summary');
+  summary.style.display = 'block';
+  const totalObj = allResults.reduce((a, r) => a + r.count, 0);
+  const classSet = new Set(allResults.flatMap(r => r.detections.map(d => d.class)));
+  const relevant = allResults.reduce((a, r) => a + r.detections.filter(d => d.construction_relevant).length, 0);
+  document.getElementById('s-frames').textContent  = allResults.length;
+  document.getElementById('s-objects').textContent = totalObj;
+  document.getElementById('s-classes').textContent = classSet.size;
+  document.getElementById('s-relevant').textContent = relevant;
+}
+
+function renderTopObjects(tally) {
+  const top = Object.entries(tally).sort((a, b) => b[1] - a[1]).slice(0, 6);
+  const el  = document.getElementById('top-objects');
+  el.innerHTML = '<span class="top-label">Top detected:</span>';
+  top.forEach(([cls, count]) => {
+    const pill = document.createElement('span');
+    pill.className = 'obj-pill';
+    pill.textContent = `${cls} (${count})`;
+    el.appendChild(pill);
+  });
+}
+
+// ── Export ────────────────────────────────────────────────────────────────────
+function exportJSON() {
+  const report = {
+    video: videoMeta.name,
+    generated: new Date().toISOString(),
+    frames_analyzed: allResults.length,
+    frames: allResults
+  };
+  const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `oxblue_${Date.now()}.json`;
+  a.click();
+}
+</script>
+</body>
+</html>

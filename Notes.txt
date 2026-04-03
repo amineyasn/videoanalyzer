@@ -1,0 +1,19 @@
+YOLO https://docs.ultralytics.com/models/yolo26/
+OPEN CV https://opencv.org/
+
+Browser (HTML page)          Python (server.py)
+  Upload video         →     OpenCV samples at 1fps
+  Show progress        ←     YOLO detects objects per frame
+  Display results      ←     Returns JSON
+
+
+
+
+  # 1. Install dependencies (only once)
+pip install -r requirements.txt
+
+# 2. Start the server
+python server.py
+
+# 3. Open your browser
+http://localhost:5000
